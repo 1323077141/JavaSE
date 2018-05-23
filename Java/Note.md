@@ -55,3 +55,12 @@ javadoc -d 生成的文件名 -author -version 源文件(生成在当前目录�
 | :---: | :---: |
 |byte(1字节),short(2),int(4),long(8),float(4),double(8),char(2),boolean(1)| 基本类型|
 | class,interface,数组  | 引用数据类型 |
+##### 4.变量之间的转换
+(不考虑布尔类型,即 char byte short int long float double)  
+1)自动类型转换  
+char,byte,short ===> int ===> long ===> float ===> double  
+PS:short 与 byte 与 char 之间运算应为 int 类型  
+2)强制类型转换  
+
+
+
