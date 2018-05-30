@@ -4,6 +4,7 @@ logs
 logs/
 .idea
 .idea/
+out/
 src/test
 src/test/
 .DS_Store
