@@ -102,9 +102,12 @@ boolean:false;
  子类集成父类；若父类的方法对子类不使用，则子类可以对该父类方法重写、覆盖、覆写  
  要求：  
  ①返回值，方法名，参数列表与父类相同  
- ②子类方法的修饰符必须大于或等于父类的修饰符(private<默认<protected<public)  
+ ②子类方法的修饰符必须大于或等于父类的修饰符(private<default<protected<public)(class 只能用public default修饰)  
  ③若父类方法抛异常，则子类抛出的方法异常小于或等于父类的异常  
- ④子类或父类的方法必须同为static 或非 static
+ ④子类或父类的方法必须同为static 或非 static  
+ 3)super关键字  
+ super可访问父类的属性，调用父类的方法，在子类构造器中调用父类的构造器  
+ PS:super 不限于直接父类;this 代表本类对象的引用，super代表父类的内存空间的标识
  ##### 3.面向对象的多态性
 
 
