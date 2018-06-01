@@ -134,8 +134,18 @@ boolean:false;
  3)toString():  
  ①Object 中的toString():return getClass().getName + "@" + Integer.toHexString(hasCode());//该对象所在堆空间实体的首地址  
  ②子类必须重写toString()方法  
- 4)包装类  
- 
+ 4)包装类的使用  
+   ①.包装类和基本数据类型互相转换:  
+   装箱：new Integer(value);自动装箱    
+   拆箱: xxxValue();自动拆箱    
+   ②.基本数据类型和String类:  
+   基本数据类型->String:String.valueOf(value)  
+   String -> 基本数据类型:parseXXX(str);boolean b = new Boolean("true");    
+   ③.包装类和String类:  
+   包装类 -> String：toString()    
+   String -> 包装类:Integer i = new Integer(str)  
+  5)static关键字  
+  
  
 
 
