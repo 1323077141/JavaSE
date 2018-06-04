@@ -21,6 +21,7 @@ public class TestSingleton {
 
 /**
  * 只能创建单个实例
+ * 饿汉式1
  */
 class Singleton{
 
@@ -34,6 +35,22 @@ class Singleton{
     //3.私有化instance对象，通过公共的方法调用
     //4.其他类只能通过类来调用，因此设置为static，同时类的实例也必须为static
     public static Singleton getInstance(){
+        return instance;
+    }
+}
+
+/**
+ * 饿汉式2
+ */
+class Singleton2{
+    private Singleton2(){
+        super();
+    }
+    private static Singleton2 instance = null;
+    static{
+        instance = new Singleton2();
+    }
+    public static Singleton2 getInstance(){
         return instance;
     }
 }
