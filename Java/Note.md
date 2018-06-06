@@ -213,30 +213,35 @@ boolean:false;
   
   ④代理模式(为其他对象提供一种代理以控制和这个对象的访问)  
   
-  ##### 5.异常
-  ###### 1) 体系结构
+  #### 5.异常
+  ##### 1) 体系结构
    java.lang.Object  
    |----java.lang.Throwable  
    &nbsp;&nbsp;|-------java.lang.Error：错误，java程序对此无能为力，不显式的处理  
    &nbsp;&nbsp;|-------java.lang.Exception:异常。需要进行处理  
    &nbsp;&nbsp;&nbsp;&nbsp;|------RuntimeException:运行时异常:
    &nbsp;&nbsp;&nbsp;&nbsp;ArrayIndexOutOfBoundsException/NullPointerException/ArithmeticException/ClassCastException  
-  	&nbsp;&nbsp;&nbsp;&nbsp;|------非RuntimeException:编译时异常  
-  ##### 6.集合
+  &nbsp;&nbsp;&nbsp;&nbsp;|------非RuntimeException:编译时异常  
+  ##### 2).因为java程序分为javac.exe和java.exe两个过程，在每个过程中，都有可能出现异常。故分为编译时异常、运行时异常
+   2.1 对于运行时异常比较常见，可以不显式的来处理。  
+   2.2 对于编译时异常，必须要显式的处理  
+       编译时异常，不是说有异常才处理，而是存在异常的隐患，必须在编译前，提示程序，万一出现异常，如何处理！  
+  ##### 3)
+  #### 6.集合
   
-  ##### 7.泛型
+  #### 7.泛型
   
-  ##### 8.枚举与注解
+  #### 8.枚举与注解
   
   ##### 9.IO
   
-  ##### 10.多线程
+  #### 10.多线程
   
-  ##### 11.常用类
+  #### 11.常用类
   
-  ##### 12.反射
+  #### 12.反射
   
-  ##### 13.网络编程
+  #### 13.网络编程
   
   
   
