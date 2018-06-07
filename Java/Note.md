@@ -221,16 +221,23 @@ boolean:false;
   ##### 1) 体系结构
    java.lang.Object  
    |----java.lang.Throwable  
-   &nbsp;&nbsp;|-------java.lang.Error：错误，java程序对此无能为力，不显式的处理  
-   &nbsp;&nbsp;|-------java.lang.Exception:异常。需要进行处理  
-   &nbsp;&nbsp;&nbsp;&nbsp;|------RuntimeException:运行时异常:
-   &nbsp;&nbsp;&nbsp;&nbsp;ArrayIndexOutOfBoundsException/NullPointerException/ArithmeticException/ClassCastException  
-  &nbsp;&nbsp;&nbsp;&nbsp;|------非RuntimeException:编译时异常  
+   &nbsp;&nbsp;&nbsp;&nbsp;|-------java.lang.Error：错误(JVM内部错误,资源耗尽)，不显式的处理(StackOverFlowError/OutOfMemoryError)  
+   &nbsp;&nbsp;&nbsp;&nbsp;|-------java.lang.Exception:异常。需要进行处理  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|------RuntimeException:运行时异常:  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   |-----ArrayIndexOutOfBoundsException/NullPointerException/ArithmeticException/ClassCastException  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|------非RuntimeException:编译时异常  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-----SQLException/ClassNotFoundException/IOException  
   ##### 2).因为java程序分为javac.exe和java.exe两个过程，在每个过程中，都有可能出现异常。故分为编译时异常、运行时异常
-   2.1 对于运行时异常比较常见，可以不显式的来处理。  
+   2.1 对于运行时异常比较常见，可以不显式的来处理(数组越界，类型转换，空指针,)。  
    2.2 对于编译时异常，必须要显式的处理  
-       编译时异常，不是说有异常才处理，而是存在异常的隐患，必须在编译前，提示程序，万一出现异常，如何处理！  
-  ##### 3)
+       编译时异常，不是说有异常才处理，而是存在异常的隐患，必须在编译前，提示程序出现异常如何处理.  
+  ##### 3).处理异常
+  1."抛"：当我们执行代码时，一旦出现异常，就会在异常的代码处生成一个对应的异常类型的对象，并将此对象抛出。(自动抛出/ 手动抛出):  
+   一旦抛出此异常类的对象，那么程序就终止执行;此异常类的对象抛给方法的调用者。  
+  2."抓"：抓住上一步抛出来的异常类的对象:  
+  java 提供了两种方式用来处理一个异常类的对象
+  
   #### 6.集合
   
   #### 7.泛型
