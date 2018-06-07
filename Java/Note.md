@@ -230,14 +230,80 @@ boolean:false;
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-----SQLException/ClassNotFoundException/IOException  
   ##### 2).因为java程序分为javac.exe和java.exe两个过程，在每个过程中，都有可能出现异常。故分为编译时异常、运行时异常
    2.1 对于运行时异常比较常见，可以不显式的来处理(数组越界，类型转换，空指针,)。  
-   2.2 对于编译时异常，必须要显式的处理  
+   2.2 对于编译时异常，必须要显式的处理:  
        编译时异常，不是说有异常才处理，而是存在异常的隐患，必须在编译前，提示程序出现异常如何处理.  
   ##### 3).处理异常
-  1."抛"：当我们执行代码时，一旦出现异常，就会在异常的代码处生成一个对应的异常类型的对象，并将此对象抛出。(自动抛出/ 手动抛出):  
+  1."抛"：当我们执行代码时，一旦出现异常，就会在异常的代码处生成一个对应的异常类型的对象，并将此对象抛出。(自动抛出/手动抛出):  
    一旦抛出此异常类的对象，那么程序就终止执行;此异常类的对象抛给方法的调用者。  
-  2."抓"：抓住上一步抛出来的异常类的对象:  
-  java 提供了两种方式用来处理一个异常类的对象
-  
+  2."抓"：抓住上一步抛出来的异常类的对象:java 提供了两种方式用来处理一个异常类的对象:
+  ①try...catch...finally...形式:  
+  finally是可选的;可以有多个catch语句，try中抛出的异常类对象从上往下去匹配catch中的异常类的类型，一旦满足
+   就执行catch中的代码。执行完，就跳出其后的多条catch语句;
+   若catch中多个异常类型是"并列"关系，孰上孰下都可以,若catch中多个异常类型是"包含"关系，须将子类放在父类的上面，进行处理。否则报错;
+   finally中存放的是一定会被执行的代码  
+  ②在方法的声明处，显式的使用throws + 异常类型:异常的对象可以逐层向上抛，直至MAIN方法，当然在向上抛的过程中，可以通过try-catch-finally进行处理   
+  ~~~
+    public void method1()  throws Exception1 e1,Exception2 e2{
+    		//可能出现异常（尤其是编译时异常，一定要处理）
+         }
+        
+        public void method2() throws Exception1 e1,Exception2 e2{
+    		method1();
+        }
+    
+         public void method3(){
+    	try{
+    		method2();
+    	 }catch(Exception1 e1){
+    		System.out.println(e1.getMessage());    
+    	}catch(Exception2 e2){
+    		System.out.println(e2.getMessage());    
+    	}
+    
+         }
+  ~~~
+  ##### 4).手动抛出一个异常
+  在方法的内部，可以使用  throw + 异常类对象，来手动抛出一个异常   
+  ~~~
+    public int compareTo(Object obj) throws Exception{
+    		if(this == obj){
+    			return 0;
+    		}
+    		else if(obj instanceof Circle){
+    			Circle c = (Circle)obj;
+    			if(this.radius > c.radius){
+    				return 1;
+    			}else if(this.radius == c.radius){
+    				return 0;
+    			}else{
+    				return -1;
+    			}
+    		}else{
+    			//return -2;
+    			//手动的抛出一个异常
+    			//throw new Exception("传入的类型有误！");
+    			//throw new String("传入的类型有误！");
+    			throw new MyException("传入的类型有误！");
+    		}
+    	}
+  ~~~
+  ##### 5).自定义一个异常类
+  手动抛出一个异常，除了抛出的是现成的异常类的对象之外，还可以抛出一个自定义的异常类的对象  
+  ①自定义的异常类继承现有的异常类  
+  ②提供一个序列号，提供几个重载的构造器  
+  ~~~
+  public class MyException extends Exception{
+  	
+  	static final long serialVersionUID = -70348975766939L;
+  	
+  	public MyException(){
+  		
+  	}
+  	public MyException(String msg){
+  		super(msg);
+  	}
+  }
+  ~~~
   #### 6.集合
   
   #### 7.泛型
