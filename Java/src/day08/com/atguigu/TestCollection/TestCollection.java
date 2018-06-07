@@ -1,5 +1,10 @@
 package day08.com.atguigu.TestCollection;
 
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * 存储对象:数组（基本数据类型  & 引用数据类型） ;集合（引用数据类型）
  * 数组存储对象:一旦创建长度不可变，不知道具体的的数组个数
@@ -25,6 +30,13 @@ package day08.com.atguigu.TestCollection;
  */
 public class TestCollection {
 
+    @Test
+    public void testCollection1(){
+        Collection coll = new ArrayList();
+        System.out.println(coll.size());   //元素个数
+        coll.add(123);
 
+
+    }
 
 }
