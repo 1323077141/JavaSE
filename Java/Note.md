@@ -250,7 +250,6 @@ boolean:false;
         public void method2() throws Exception1 e1,Exception2 e2{
     		method1();
         }
-    
          public void method3(){
     	try{
     		method2();
@@ -279,10 +278,6 @@ boolean:false;
     				return -1;
     			}
     		}else{
-    			//return -2;
-    			//手动的抛出一个异常
-    			//throw new Exception("传入的类型有误！");
-    			//throw new String("传入的类型有误！");
     			throw new MyException("传入的类型有误！");
     		}
     	}
@@ -291,6 +286,7 @@ boolean:false;
   手动抛出一个异常，除了抛出的是现成的异常类的对象之外，还可以抛出一个自定义的异常类的对象  
   ①自定义的异常类继承现有的异常类  
   ②提供一个序列号，提供几个重载的构造器  
+  ③子类抛出的异常类小于父类抛出的异常
   ~~~
   public class MyException extends Exception{
   	
@@ -305,6 +301,8 @@ boolean:false;
   }
   ~~~
   #### 6.集合
+  
+  
   
   #### 7.泛型
   
