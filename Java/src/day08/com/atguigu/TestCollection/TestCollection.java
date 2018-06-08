@@ -12,13 +12,11 @@ import java.util.*;
  *Java集合分为Collection和Map体系
  *  Collection接口
  *      set:元素无序，不可重复
+ *          HashSet(主要实现类,set中常用的方法都是Collection下的定义的)
+ *          LinkedHashSet
  *          TreeSet
- *          HashSet
- *              LinkedHashSet
  *      List:元素有序，可重复
- *          Vector
- *          ArrayList
- *          LinkedList
+ *          ArrayList(主要实现类)，LinkedList(适用于频繁的插入，删除操作),Vector(线程安全的，古老的实现类，插入删除慢)
  *  Map接口：key-value 键值对
  *      HashMap
  *          LinkedHashMap
