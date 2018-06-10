@@ -17,12 +17,13 @@ import java.util.*;
  *          TreeSet
  *      List:元素有序，可重复
  *          ArrayList(主要实现类)，LinkedList(适用于频繁的插入，删除操作),Vector(线程安全的，古老的实现类，插入删除慢)
- *  Map接口：key-value 键值对
- *      HashMap
- *          LinkedHashMap
- *      HashTable
- *          Properties
- *      TreeMap
+ *  Map接口：key-value 键值对(key是不可重复的，使用Set存放。value可以重复的，使用Collection来存放的。
+ *  一个key-value对构成一个entry(Map.Entry)，entry使用Set来存放)
+ *      HashMap:主要实现类，可以添加null键，null值
+ *      LinkedHashMap:使用链表维护添加的顺序,遍历时，按照添加的顺序遍历的.
+ *      TreeMap:按照添加进Map中的元素的key的指定属性进行排序，要求key是同一个类的对象。对key考虑使用自然排序 或 定制排序
+ *      Hashtable：是一个古老的实现类，线程安全的，不可以添加null键，null值不建议使用
+ *          Properties：常用来处理属性文件,键与值都为String 类型
  *
  */
 public class TestCollection {
