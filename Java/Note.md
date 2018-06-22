@@ -358,7 +358,8 @@ boolean:false;
     @Deprecated: 用于表示某个程序元素(类, 方法等)已过时  
     @SuppressWarnings: 抑制编译器警告  
     2.如何自定义注解  
-    以SuppressWarnings为例进行创建即可  
+    以SuppressWarnings为例进行创建即可:  
+    @interface MyAnnotation  
     3.元注解：可以对已有的注解进行解释说明。  
     Retention: SOURCE   CLASS  RUNTIME  
     Target:  
