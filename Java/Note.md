@@ -360,13 +360,17 @@ boolean:false;
     2.如何自定义注解  
     以SuppressWarnings为例进行创建即可:  
     @interface MyAnnotation  
-    3.元注解：可以对已有的注解进行解释说明。  
-    Retention: SOURCE   CLASS  RUNTIME  
-    Target:  
-    Documented:javadoc  
-    Inherited  
+    3.元注解：可以对已有的注解进行解释说明。(对其他注解添加注解)    
+    Retention:SOURCE,CLASS(默认),RUNTIME :被修饰的注解的生命周期    
+    Target:指明被修饰的注解能用于修饰哪些程序元素    
+    Documented:javadoc（Retention必须设置为RUNTIME）  
+    Inherited:被该注解修饰的Annotation具有继承性  
   #### 9.IO
-  
+  1).抽象基类(所有IO流都继承于此)  
+  字节流(8 bit):InputStream,OutputStream  
+  字符流(16 bit):Reader,Writer  
+  2)节点流(4个)  
+  FileInputStream,FileOutputStream,FileReader,FileWriter  
   
   
   #### 10.多线程
