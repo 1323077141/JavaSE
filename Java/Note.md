@@ -371,6 +371,7 @@ boolean:false;
   字符流(16 bit):Reader,Writer  
   2)节点流(4个)  
   FileInputStream,FileOutputStream,FileReader,FileWriter  
+  3)处理流:  
   
   
   #### 10.多线程
