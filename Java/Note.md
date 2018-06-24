@@ -372,8 +372,24 @@ boolean:false;
   2)节点流(4个)  
   FileInputStream,FileOutputStream,FileReader,FileWriter  
   3)处理流:  
-  
-  
+  ①缓冲流:BufferedInputStream,BufferedOutputStream,BufferedReader,BufferedWriter  
+  ②转换流(字节流与字符流之间的转换):InputStreamReader,OutputStreamWriter(字节流中的数据都是字符时，转换为字符流更有效)  
+  编码:字符串-->字符数组 解码:字符数组-->字符串  
+  ③标准输入输出流  
+  System.in;System.out;  
+  ④打印流  
+  PrintStream字节流;PrintWriter 字符流  
+  ⑤数据流  
+  DataInputStream;DataOutputStream(处理基本数据类型,String,字节数组数据)  
+  ⑥对象流  
+  ObjectInputStream;ObjectOutputStream;  
+  (序列化:Serialize;反序列化:Deserialize;不能序列化和反序列化static与transient成员)  
+  序列化机制:允许把内存中的JAVA对象转换成与平台无关的二进制流，从而允许把这种二进制流持久地保存在磁盘上，或通过额昂罗将这种二进制流传输到另一个网络节点。  
+  当其他程序获取这种二进制流时，就可以恢复成原来的Java对象  
+  要实现序列化则必须继承Serializable,Externalizable接口之一  
+  ⑦RandomAccessFile类  
+  支持随机访问，程序可以直接跳到文件的任意位置来读，写文件  
+  mode:r 只读;rw 读写；rwd 读写，同步文件内容的更新;rws 读写，同步文件内容和元数据的更新  
   #### 10.多线程
   
   #### 11.常用类
