@@ -396,7 +396,20 @@ boolean:false;
   进程可以理解为执行中的程序  
   线程可以理解为进程的进一步细分，程序的一条执行路径  
   ②创建java程序的线程  
-  
+  方式一：继承于Thread类  
+  方式二：实现Runnable接口  
+  ③两种方式的对比：联系：class Thread implements Runnable  
+  比较哪个好？实现的方式较好。  
+  ①解决了单继承的局限性。  
+  ②如果多个线程有共享数据的话，建议使用实现方式，同时，共享  
+  数据所在的类可以作为Runnable接口的实现类。  
+  ④线程里的常用方法：  
+  start() run() currentThread() getName() setName(String name) yield() join() sleep()  
+   isAlive() getPriority() setPriority(int i) wait() notify() notifyAll()  
+  ⑤线程的生命周期  
+  新建---(start)---就绪-----(获取CPU/失去CPU执行权)运行-----(正常执行结束;Error/Exception未处理;stop)死亡  
+  运行-----(sleep;等待同步锁;wait/join;suspend,即挂起)---阻塞  
+  阻塞-----(sleep时间到;获取同步锁;notify/notifyAll;resume,即释放)----就绪  
   
   
   #### 11.常用类
