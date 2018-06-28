@@ -430,10 +430,33 @@ boolean:false;
   wait;notify;notifyAll 这三者只有在synchronized方法或代码块中使用，否则出现java.lang.IllegalMonitorStateException  
   wait():当在同步中，执行到此方法，则此线程“等待”，直至其他线程执行notify()的方法，将其唤醒，唤醒后继续其wait()后的代码  
   notify()/notifyAll():在同步中，执行到此方法，则唤醒其他的某一个或所有的被wait的线程。  
-  
-  
   #### 11.常用类
+  ①String,StringBuffer,StringBuilder  
+  String类：不可变的字符序列（如：String str = "atguigu"; str += "javaEE"）  
+  	1.关注于String常用的方法！  
+  	2.String类与基本数据类型、包装类；与字符数组、字节数组；  
+  	2.1 字符串 与基本数据类型、包装类之间转换  
+  	 ①字符串 --->基本数据类型、包装类:调用相应的包装类的parseXxx(String str);  
+  	 ①基本数据类型、包装类--->字符串:调用字符串的重载的valueOf()方法  
+  	2.2 字符串与字节数组间的转换   
+  	 ①字符串---->字节数组:调用字符串的getBytes()  
+  	 ②字节数组---->字符串：调用字符串的构造器  
+  	2.3 字符串与字符数组间的转换  
+  	①字符串---->字符数组：调用字符串的toCharArray();  
+  	②字符数组---->字符串:调用字符串的构造器  
+  	2.4 String与StringBuffer的转换  
+  	①String --->StringBuffer：使用StringBuffer的构造器：new StringBuffer(String str);  
+  	②StringBuffer----->String:使用StringBuffer的toString()方法  
+    StringBuffer类：可变的字符序列  
+    StringBuilder类：可变的字符序列，jdk5.0新加入的，效率更高，线程不安全。  
+    常用的方法：添加：append(...) 删除 delete(int startIndex, int endIndex) 修改：setCharAt(int n ,char ch) 查询：charAt(int index)  
+  	插入:insert(int index, String str) 反转reverse() 长度：length()  
+  注：String类的不可变性：  
+  ②System,Date,SimpleDateFormat,Calender  
   
+  ③Math类  
+  
+  ④BigInteger,BigDecimal  
   
   #### 12.反射
   
