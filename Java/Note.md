@@ -453,7 +453,33 @@ boolean:false;
   	插入:insert(int index, String str) 反转reverse() 长度：length()  
   注：String类的不可变性：  
   ②System,Date,SimpleDateFormat,Calender  
-  
+  2.1System类  
+  currentTimeMillis()：返回当前时间的long型值。此long值是从1970年1月1日0点0分00秒开始到当前的毫秒数。  
+  此方法常用来计算时间差。  
+  2.2 Date类：java.util.Date  
+  1.Date  d = new Date();//返回当前时间的Date：Mon May 12 15:17:01 CST 2014  
+  Date d1 = new Date(15231512541241L);//返回形参处此long型值对应的日期  
+  //getTime()：返回当前日期对应的long型值。toString()  
+  2.3SimpleDateFormat:java.text.SimpleDateFormat  
+  格式化 ：日期--->文本 使用SimpleDateFormat的format()方法     
+  解析：文本--->日期 使用SimpleDateFormat的parse()方法  
+  //1.格式化1  
+  SimpleDateFormat sdf = new SimpleDateFormat();  
+  String date = sdf.format(new Date());  
+  System.out.println(date);//14-5-12 下午3:24  
+  //2.格式化2  
+  SimpleDateFormat sdf1 = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");  
+  date = sdf1.format(new Date());  
+  System.out.println(date);//星期一, 12 五月 2014 15:29:16 +0800  
+  //3.解析：  
+  Date date1 = sdf.parse("14-5-12 下午3:24");  
+  System.out.println(date1);  
+  date1 = sdf1.parse("星期一, 12 五月 2014 15:29:16 +0800");  
+  //date1 = sdf1.parse("14-5-12 下午3:24");  
+  System.out.println(date1);  
+  2.4 Calendar:日历类  
+  2.4.1获取实例：Calendar c = Calendar.getInstance();  
+  2.4.2 get()/set()/add()/date getTime()/setTime()  
   ③Math类  
   
   ④BigInteger,BigDecimal  
