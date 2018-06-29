@@ -14,7 +14,7 @@ package day08.com.atguigu.TestGeneralClass;
  */
 public class TestStringPractice {
 
-    
+
     //2.讲一个字符串进行反转。将字符串中指定部分进行反转
     public static String reverseString1(String str,int start,int end){
         String str1 = str.substring(0,start);
