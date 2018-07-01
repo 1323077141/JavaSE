@@ -431,20 +431,20 @@ boolean:false;
   wait():当在同步中，执行到此方法，则此线程“等待”，直至其他线程执行notify()的方法，将其唤醒，唤醒后继续其wait()后的代码  
   notify()/notifyAll():在同步中，执行到此方法，则唤醒其他的某一个或所有的被wait的线程。  
   #### 11.常用类
-  ①String,StringBuffer,StringBuilder  
-  String类：不可变的字符序列（如：String str = "atguigu"; str += "javaEE"）  
+  1.String,StringBuffer,StringBuilder  
+  1.1 String类：不可变的字符序列（如：String str = "atguigu"; str += "javaEE"）  
   	1.关注于String常用的方法！  
   	2.String类与基本数据类型、包装类；与字符数组、字节数组；  
-  	2.1 字符串 与基本数据类型、包装类之间转换  
+  2.1 字符串 与基本数据类型、包装类之间转换  
   	 ①字符串 --->基本数据类型、包装类:调用相应的包装类的parseXxx(String str);  
   	 ①基本数据类型、包装类--->字符串:调用字符串的重载的valueOf()方法  
-  	2.2 字符串与字节数组间的转换   
+  2.2 字符串与字节数组间的转换   
   	 ①字符串---->字节数组:调用字符串的getBytes()  
   	 ②字节数组---->字符串：调用字符串的构造器  
-  	2.3 字符串与字符数组间的转换  
-  	①字符串---->字符数组：调用字符串的toCharArray();  
-  	②字符数组---->字符串:调用字符串的构造器  
-  	2.4 String与StringBuffer的转换  
+  2.3 字符串与字符数组间的转换  
+    ①字符串---->字符数组：调用字符串的toCharArray();  
+    ②字符数组---->字符串:调用字符串的构造器  
+  2.4 String与StringBuffer的转换  
   	①String --->StringBuffer：使用StringBuffer的构造器：new StringBuffer(String str);  
   	②StringBuffer----->String:使用StringBuffer的toString()方法  
     StringBuffer类：可变的字符序列  
@@ -481,13 +481,156 @@ boolean:false;
   2.4.1获取实例：Calendar c = Calendar.getInstance();  
   2.4.2 get()/set()/add()/date getTime()/setTime()  
   ③Math类  
-  
   ④BigInteger,BigDecimal  
-  
   #### 12.反射
-  
+  1.如何创建Class的实例(重点)  
+  1.1过程：源文件经过编译(javac.exe)以后，得到一个或多个.class文件。.class文件经过运行(java.exe)这步，  
+  	就需要进行类的加载（通过JVM的类的加载器），记载到内存中的缓存。每一个放入缓存中的.class文件就是一个Class的实例！  
+  1.2 Class的一个对象，对应着一个运行时类。相当于一个运行时类本身充当了Class的一个实例。  
+  1.3 java.lang.Class是反射的源头。    
+  接下来涉及到反射的类都在java.lang.reflect子包下。如：Field  Method Constructor  Type Package..  
+  当通过Class的实例调用getMethods() --->Method , getConstructors() ---->Constructor  
+  1.4实例化Class的方法(三种):  
+  ~~~
+        // 1.调用运行时类的.class属性  
+        Class clazz1 = Person.class;
+        System.out.println(clazz1);
+  		Class clazz2 = Creator.class;
+  		System.out.println(clazz2);
+  		// 2.通过运行时类的对象，调用其getClass()方法
+  		Person p = new Person();
+  		Class clazz3 = p.getClass();
+  		System.out.println(clazz3);
+  		// 3.调用Class的静态方法forName(String className)。此方法报ClassNotFoundException
+  		String className = "com.atguigu.java.Person";
+  		Class clazz4 = Class.forName(className);
+  		System.out.println(clazz4);
+  ~~~
+  2.有了Class实例以后，可以做什么？应用一：  
+  可以创建对应的运行时类的对象(重点)  
+  ~~~
+  	//获取运行时类的对象：方法一
+  	@Test
+  	public void test1() throws Exception{
+  		Class clazz = Class.forName("com.atguigu.review.Animal");
+  		Object obj = clazz.newInstance();
+  		Animal a = (Animal)obj;
+  		System.out.println(a);
+  	}
+  	//调用指定的构造器创建运行时类的对象
+  	@Test
+  	public void test2() throws Exception{
+  		Class clazz = Animal.class;
+  		Constructor cons = clazz.getDeclaredConstructor(String.class,int.class);
+  		cons.setAccessible(true);
+  		Animal a = (Animal)cons.newInstance("Tom",10);
+  		System.out.println(a);
+  	}
+  ~~~
+  3.有了Class实例以后，可以做什么？
+  应用二：获取对应的运行时类的完整的类的结构：属性、方法、构造器、包、父类、接口、泛型、注解、异常、内部类  
+  ~~~
+  如：Method[] m1 = clazz.getMethods() :获取到对应的运行时类中声明的权限为public的方法（包含其父类中的声明的public）
+        Method[] m2 = clazz.getDeclaredMethods()：获取到对应的运行时类中声明的所有的方法（①任何权限修饰符修饰的都能获取②不含父类中的）
+  ~~~
+  4.有了Class实例以后，可以做什么？  
+  应用三：调用对应的运行时类中指定的结构（某个指定的属性、方法、构造器）(重点)  
+  ~~~
+  //调用指定属性
+  @Test
+  public void test3() throws Exception{
+  	Class clazz = Class.forName("com.atguigu.review.Animal");
+  	Object obj = clazz.newInstance();
+  	Animal a = (Animal)obj;
+  	//调用非public的属性
+  	Field f1 = clazz.getDeclaredField("name");
+  	f1.setAccessible(true);
+  	f1.set(a, "Jerry");
+  	//调用public的属性
+  	Field f2 = clazz.getField("age");
+  	f2.set(a, 9);
+  	System.out.println(f2.get(a));
+  	System.out.println(a);
+  	//调用static的属性
+  	Field f3 = clazz.getDeclaredField("desc");
+  	System.out.println(f3.get(null));
+  }
+  //调用指定的方法
+  @Test
+  public void test4() throws Exception{
+  	Class clazz = Class.forName("com.atguigu.review.Animal");
+  	Object obj = clazz.newInstance();
+  	Animal a = (Animal)obj;
+  	
+  	//调用非public的方法
+  	Method m1 = clazz.getDeclaredMethod("getAge");
+  	m1.setAccessible(true);
+  	int age = (Integer)m1.invoke(a);
+  	System.out.println(age);
+  	//调用public的方法
+  	Method m2 = clazz.getMethod("show", String.class);
+  	Object returnVal = m2.invoke(a,"金毛");
+  	System.out.println(returnVal);
+  	//调用static的方法
+  	Method m3 = clazz.getDeclaredMethod("info");
+  	m3.setAccessible(true);
+  //		m3.invoke(Animal.class);
+  	m3.invoke(null);
+  }
+  ~~~
+  5.动态代理---反射的应用。体会反射的动态性  
+  代理设计模式的原理:   
+  使用一个代理将对象包装起来, 然后用该代理对象取代原始对象. 任何对原始对象的调用都要通过代理. 代理对象决定是否以及何时
+  将方法调用转到原始对象上  
+  静态代理：要求被代理类和代理类同时实现相应的一套接口；通过代理类的对象调用重写接口的方法时，实际上执行的是被代理类的同样的
+  方法的调用。  
+  动态代理：在程序运行时，根据被代理类及其实现的接口，动态的创建一个代理类。当调用代理类的实现的抽象方法时，就发起对被代理类同样
+  方法的调用。  
+  涉及到的技术点：  
+  ~~~
+  ①提供一个实现了InvocationHandler接口实现类，并重写其invoke()方法
+  			  ②Proxy.newProxyInstance(obj.getClass().getClassLoader(),obj.getClass().getInterfaces(),h);
+  			//注：obj：被代理类对象 ； h:实现了InvocationHandler接口的实现类的对象
+  例子见：TestProxy例子
+  ~~~
+  动态代理与AOP  
   
   #### 13.网络编程
+  1.要想实现网络传输，需要考虑的问题有哪些？  
+  1.1 如何才能准确的定位网络上的一台主机？  
+  1.2 如何才能进行可靠的、高效的数据传输？  
+  2. java如何实现的网络通信  
+  2.1 使用IP地址---定位一台主机;使用端口号---定位一个应用;===>InetAddress类  
+  如何创建一个InetAddress的对象？getByName("");   
+  比如：InetAddress inet = InetAddress.getByName("192.168.10.165");  
+  如何获取本机的一个InetAddress的对象？getLocalHost()  
+  域名：getHostName();ip:getHostAddress()  
+  2.2 对应有协议  
+  应用层:HTTP;ftp;telnet;DNS  
+  传输层:TCP;UDP  
+  网络层:IP;ICMP;ARP  
+  物理+数据链路层:Link  
+  2.3 TCP和UDP  
+  TCP协议:  
+  使用TCP前，必须建立TCP协议，形成传输数据通道;  
+  传输前，采用"三次握手"方式，是可靠的;  
+  在TCP协议进行通信的两个应用进程:客户端、服务端;  
+  在数据中进行大数据量的传输;  
+  传输完毕，需释放已建立的连接，效率低.  
+  UDP协议:  
+  将数据、源、目的封装成数据包，不需要建立连接;  
+  每个数据报的大小限制在64kb大小;  
+  因无序连接，是不可靠的;  
+  发送数据时无需释放资源，速度快.  
+  2.4  
+  TCP的编程：Socket;ServerSocket  
+  例子：  
+  1.客户端发送内容给服务端，服务端将内容打印到控制台上。  
+  2.客户端发送内容给服务端，服务端给予反馈。  
+  3.从客户端发送文件给服务端，服务端保存到本地。并返回“发送成功”给客户端。并关闭相应的连接。  
+  UDP的编程：DatagramSocket;DatagramPacket  
+  URL的编程：统一资源定位符一个URL的对象，对应着互联网上一个资源。  
+  //我们可以通过URL的对象调用其相应的方法，将此资源读取（“下载”）  
   
   
   
