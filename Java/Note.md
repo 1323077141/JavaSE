@@ -505,6 +505,10 @@ boolean:false;
   		String className = "com.atguigu.java.Person";
   		Class clazz4 = Class.forName(className);
   		System.out.println(clazz4);
+  		 //4.通过类的加载器
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        Class clazz = classLoader.loadClass(className);
+        System.out.println(clazz.getName());
   ~~~
   2.有了Class实例以后，可以做什么？应用一：  
   可以创建对应的运行时类的对象(重点)  
@@ -530,8 +534,29 @@ boolean:false;
   3.有了Class实例以后，可以做什么？
   应用二：获取对应的运行时类的完整的类的结构：属性、方法、构造器、包、父类、接口、泛型、注解、异常、内部类  
   ~~~
-  如：Method[] m1 = clazz.getMethods() :获取到对应的运行时类中声明的权限为public的方法（包含其父类中的声明的public）
-        Method[] m2 = clazz.getDeclaredMethods()：获取到对应的运行时类中声明的所有的方法（①任何权限修饰符修饰的都能获取②不含父类中的）
+  属性:
+  Field[] getFields只能获取到运行时类及其父类中声明为Public 的属性（包含其父类中的声明的public）
+  Field[] getDeclaredFields:获取运行时类本身声明的所有的属性（①任何权限修饰符修饰的都能获取②不含父类中的）
+  String Modifier.toString(field.getModifiers()):获取属性的权限修饰符
+  Class field.getType() : 获取属性的类型
+  方法:
+  Method[] clazz.getMethods() :获取到对应的运行时类中声明的权限为public的方法（包含其父类中的声明的public）
+  Method[] clazz.getDeclaredMethods()：获取到对应的运行时类中声明的所有的方法（①任何权限修饰符修饰的都能获取②不含父类中的）
+  Class method.getReturnType() :方法的返回值
+  Class[] method.getParameterTypes() : 方法形参
+  Class[] method.getExceptionTypes(): 异常类型
+  
+  Constructor[] clazz.getDeclaredConstructors():获取构造器
+  Class  clazz.getSuperclass(); 获取父类
+  Type clazz.getGenericSuperclass(); 获取带泛型的父类
+  
+  ParameterizedType param = (ParameterizedType)type; 获取父类的泛型
+  Type[] args = param.getActualTypeArguments();
+  System.out.println(((Class)args[0]).getName());
+  
+  Class[] clazz.getInterfaces(); 获取实现的接口
+  Package clazz.getPackage(); 获取所在的包
+  Annotation[] clazz.getAnnotations(); 获取注释
   ~~~
   4.有了Class实例以后，可以做什么？  
   应用三：调用对应的运行时类中指定的结构（某个指定的属性、方法、构造器）(重点)  
@@ -569,7 +594,7 @@ boolean:false;
   	System.out.println(age);
   	//调用public的方法
   	Method m2 = clazz.getMethod("show", String.class);
-  	Object returnVal = m2.invoke(a,"金毛");
+  	Object returnVal = m2.invoke(a,"金毛");   invoke 调用后返回方法的返回值
   	System.out.println(returnVal);
   	//调用static的方法
   	Method m3 = clazz.getDeclaredMethod("info");

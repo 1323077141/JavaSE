@@ -2,13 +2,136 @@ package day08.com.atguigu.TestReflect;
 
 import org.junit.Test;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.io.InputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.*;
+import java.util.Properties;
 
 public class TestReflect {
 
+
+    @Test
+    public void testRun1() throws Exception{
+        String className = "day08.com.atguigu.TestReflect.Person";
+        Class clazz = Class.forName(className);
+        //调用指定的构造器
+
+
+        //1.获取指定的属性
+        Field name = clazz.getField("name");
+        Person p = (Person) clazz.newInstance();
+        //赋值
+        name.set(p,"Tom");
+
+    }
+
+    @Test
+    public void testOthers(){
+        Class clazz = Person.class;
+        //获取父类
+        Class superClass = clazz.getSuperclass();
+        //获取带泛型的父类
+        Type type = clazz.getGenericSuperclass();
+        //获取父类的泛型
+        ParameterizedType param = (ParameterizedType)type;
+        Type[] args = param.getActualTypeArguments();
+        System.out.println(((Class)args[0]).getName());
+        //获取实现的接口
+        Class[] interfaces = clazz.getInterfaces();
+        //获取所在的包
+        Package pack = clazz.getPackage();
+        //获取注释
+        Annotation[] anns = clazz.getAnnotations();
+    }
+
     /**
-     * 获取Class 的实例
+     * 获取构造器
+     * @throws Exception
+     */
+    @Test
+    public void testConstructor() throws Exception{
+        String className = "day08.com.atguigu.TestReflect.Person";
+        Class clazz = Class.forName(className);
+
+        Constructor[] cons = clazz.getDeclaredConstructors();
+    }
+
+    /**
+     * 关于类加载器
+     */
+    @Test
+    public void test4() throws Exception{
+        ClassLoader loader1 = ClassLoader.getSystemClassLoader();
+        System.out.println(loader1);  //app
+
+        ClassLoader loader2 = loader1.getParent();
+        System.out.println(loader2);  //ext
+
+        ClassLoader loader3 = loader2.getParent();
+        System.out.println(loader3);  //bootstrap(无法直接获取)
+
+        Class clazz = Person.class;
+        ClassLoader loader4 = clazz.getClassLoader();
+        System.out.println(loader4);  //app
+
+        String className = "java.lang.Object";
+        Class clazz1 = Class.forName(className);
+        ClassLoader loader5 = clazz1.getClassLoader();
+        System.out.println(loader5); //null
+
+
+        //掌握
+        ClassLoader loader = this.getClass().getClassLoader();
+        InputStream is = loader.getResourceAsStream("com\\atguigu\\java\\jdbc.properties");
+        Properties properties = new Properties();
+        properties.load(is);
+        properties.get("user");
+
+
+    }
+
+    /**
+     * 创建运行时类的实例:
+     */
+    @Test
+    public void test5() throws Exception{
+
+        String className = "day08.com.atguigu.TestReflect.Person";
+        Class clazz = Class.forName(className);
+        //创建运行时类对象,调用的是空参构造器,且权限要足够
+        Object obj = clazz.newInstance();
+        Person p = (Person)obj;
+        System.out.println(p);
+        //getFields只能获取到运行时类及其父类中声明为Public 的属性
+        //getDeclaredFields:获取运行时类本身声明的所有的属性
+
+        Field[] fields = clazz.getFields();
+        Field[] fields1 = clazz.getDeclaredFields();
+        for (Field item : fields1){
+            String str = Modifier.toString(item.getModifiers());
+            System.out.println(str);
+            Class type = item.getType();
+            System.out.println(type.getName());
+        }
+
+        Method[] m = clazz.getMethods();
+        for (Method method : m){
+            method.getAnnotations();
+            System.out.println(Modifier.toString(method.getModifiers()));
+            //返回值
+            Class returnType = method.getReturnType();
+            //方法名
+            System.out.println(method.getName());
+            //形参列表
+            Class[] params = method.getParameterTypes();
+            //异常类型
+            Class[] exceptions = method.getExceptionTypes();
+        }
+
+    }
+
+    /**
+     * 获取Class 的实例 :四种
      */
     @Test
     public void test3() throws Exception{
@@ -22,7 +145,7 @@ public class TestReflect {
         System.out.println(clazz2.getName());
 
         //3.通过Class的静态方法获取
-        String className = "com.atguigu.TestReflect.TestReflect";
+        String className = "day08.com.atguigu.TestReflect.Person";
         Class clazz3 = Class.forName(className);
         System.out.println(clazz3);
 
@@ -32,7 +155,7 @@ public class TestReflect {
         System.out.println(clazz.getName());
 
         //通过Class 创建对应的实例
-        clazz3.newInstance();
+//        clazz3.newInstance();
 
     }
 
