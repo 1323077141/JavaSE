@@ -10,6 +10,7 @@ import java.net.InetAddress;
  * 2.创建对象:InetAddress.getByName(String name),该对象有两个方法:
  * getHostName 获取IP地址对应的域名
  * getHostAddress 获取IP地址
+ * IP地址加端口号组成网络套接字
  *
  */
 public class TestInetAddress {
