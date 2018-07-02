@@ -654,6 +654,8 @@ boolean:false;
   2.客户端发送内容给服务端，服务端给予反馈。  
   3.从客户端发送文件给服务端，服务端保存到本地。并返回“发送成功”给客户端。并关闭相应的连接。  
   UDP的编程：DatagramSocket;DatagramPacket  
+  UDP数据报DatagramPacket 通过数据报套接字DatagramSocket发送和接收;  
+  DatagramPacket对象封装了UDP数据报，在数据报中包含了发送端的IP地址和端口号以及接收端的IP地址和端口号  
   URL的编程：统一资源定位符一个URL的对象，对应着互联网上一个资源。  
   //我们可以通过URL的对象调用其相应的方法，将此资源读取（“下载”）  
   
