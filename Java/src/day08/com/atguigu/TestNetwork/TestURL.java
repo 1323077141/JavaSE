@@ -58,12 +58,12 @@ public class TestURL {
             }
         }
         //数据的输入与输出都有
-        InputStream is = null;
+        InputStream is1 = null;
         FileOutputStream fos = null;
         try {
             url = new URL("http://127.0.0.1:8080/examples/HelloWorld.txt?a=b");
             URLConnection conn = url.openConnection();
-            is = conn.getInputStream();
+            is1 = conn.getInputStream();
             fos = new FileOutputStream(new File("abc.txt"));
             byte[] b = new byte[20];
             int len;
@@ -80,9 +80,9 @@ public class TestURL {
                     e.printStackTrace();
                 }
             }
-            if (is != null){
+            if (is1 != null){
                 try {
-                    is.close();
+                    is1.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
