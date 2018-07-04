@@ -663,12 +663,13 @@ boolean:false;
 ##### 1.Linux 的目录结构
 linux 目录是树状的.最上层是根目录"/".  
 根目录下:  
-/root ;/bin 系统使用的指令;/boot 启动linux使用的一些核心文件;  
+/root 系统管理员;/bin 系统使用的指令;/boot 启动linux使用的一些核心文件;  
 /dev 管理设备;/etc 所有的系统管理所需要的配置文件和子目录;  
 /home 存放普通用户信息;/var 不断变化的东西，如日志;/lib 系统开机需要的基本的动态连接共享库;  
 /usr 用户的应用程序和文件;/media U盘或光驱;/mnt 让用户临时挂载别的文件(共享文件);/opt 安装软件所放的目录;/sbin super用户使用的管理程序;  
 /tmp 存放临时文件;/selinux 与安全性相关;/lost+founf 系统非法关机时存放文件;/srv 一些服务启动以后需要的数据;  
-/proc 内核相关，系统内存的映射，访问该目录获取系统信息;/sys 安装2.6内核中新出现的文件系统;/usr/local 安装过后的目录;/selinux[security-enhanced linux] 安全子系统,能控制程序只访问特定的系统;
+/proc 内核相关，系统内存的映射，访问该目录获取系统信息;/sys 安装2.6内核中新出现的文件系统;/usr/local 安装过后的目录;/selinux[security-enhanced linux] 安全子系统,能控制程序只访问特定的系统;  
+##### 2.
   
   
 
