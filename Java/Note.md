@@ -334,37 +334,37 @@ boolean:false;
   6.不能在catch中使用泛型  
   7.从泛型类派生子类，泛型类型需具体化  
   4.泛型与继承的关系  
-  A类是B类的子类，G是带泛型声明的类或接口。那么G<A>不是G<B>的子类！  
+  A类是B类的子类，G是带泛型声明的类或接口。那么G(A)不是G(B)的子类！  
   5.通配符:?  
-  A类是B类的子类，G是带泛型声明的类或接口。则G<?> 是G<A>、G<B>的父类！  
-  ①以List<?>为例，能读取其中的数据。因为不管存储的是什么类型的元素，其一定是Object类的或其子类的。  
-  ①以List<?>为例，不可以向其中写入数据。因为没有指明可以存放到其中的元素的类型！唯一例外的是：null   
-  6*.  List<？ extends A> :可以将List<A>的对象或List<B>的对象赋给List<? extends A>。其中B 是A的子类  
-         ? super A:可以将List<A>的对象或List<B>的对象赋给List<? extends A>。其中B 是A的父类  
+  A类是B类的子类，G是带泛型声明的类或接口。则G(?) 是G(A)、G(B)的父类！  
+  ①以List(?)为例，能读取其中的数据。因为不管存储的是什么类型的元素，其一定是Object类的或其子类的。  
+  ①以List(?)为例，不可以向其中写入数据。因为没有指明可以存放到其中的元素的类型！唯一例外的是：null   
+  6*.  List(？ extends A) :可以将List(A)的对象或List(B)的对象赋给List(? extends A)。其中B 是A的子类  
+   ? super A:可以将List(A)的对象或List(B)的对象赋给List(？ extends A)。其中B 是A的父类  
   #### 8.枚举与注解
   一、枚举类
   1.如何自定义枚举类。 枚举类：类的对象是有限个的，确定的。  
-     1.1 私有化类的构造器，保证不能在类的外部创建其对象   
-     1.2 在类的内部创建枚举类的实例。声明为：public static final   
-     1.3 若类有属性，那么属性声明为：private final 。此属性在构造器中赋值。  
+   1.1 私有化类的构造器，保证不能在类的外部创建其对象   
+   1.2 在类的内部创建枚举类的实例。声明为：public static final   
+   1.3 若类有属性，那么属性声明为：private final 。此属性在构造器中赋值。  
   2.使用enum关键字定义枚举类  
   	2.1其中常用的方法：values()  valueOf(String name);  
   	2.2枚举类如何实现接口：  
   	①让类实现此接口，类的对象共享同一套接口的抽象方法的实现。  
   	①让类的每一个对象都去实现接口的抽象方法，进而通过类的对象调用被重写的抽象方法时，执行的效果不同  
   二、注解Annotation  
-    1.JDK提供的常用的三个注解  
-    @Override: 限定重写父类方法, 该注释只能用于方法  
-    @Deprecated: 用于表示某个程序元素(类, 方法等)已过时  
-    @SuppressWarnings: 抑制编译器警告  
-    2.如何自定义注解  
-    以SuppressWarnings为例进行创建即可:  
-    @interface MyAnnotation  
-    3.元注解：可以对已有的注解进行解释说明。(对其他注解添加注解)    
-    Retention:SOURCE,CLASS(默认),RUNTIME :被修饰的注解的生命周期    
-    Target:指明被修饰的注解能用于修饰哪些程序元素    
-    Documented:javadoc（Retention必须设置为RUNTIME）  
-    Inherited:被该注解修饰的Annotation具有继承性  
+   1.JDK提供的常用的三个注解  
+   @Override: 限定重写父类方法, 该注释只能用于方法  
+   @Deprecated: 用于表示某个程序元素(类, 方法等)已过时  
+   @SuppressWarnings: 抑制编译器警告  
+   2.如何自定义注解  
+   以SuppressWarnings为例进行创建即可:  
+   @interface MyAnnotation  
+   3.元注解：可以对已有的注解进行解释说明。(对其他注解添加注解)    
+   Retention:SOURCE,CLASS(默认),RUNTIME :被修饰的注解的生命周期    
+   Target:指明被修饰的注解能用于修饰哪些程序元素    
+   Documented:javadoc（Retention必须设置为RUNTIME）  
+   Inherited:被该注解修饰的Annotation具有继承性  
   #### 9.IO
   1).抽象基类(所有IO流都继承于此)  
   字节流(8 bit):InputStream,OutputStream  
@@ -436,21 +436,21 @@ boolean:false;
   	1.关注于String常用的方法！  
   	2.String类与基本数据类型、包装类；与字符数组、字节数组；  
   2.1 字符串 与基本数据类型、包装类之间转换  
-  	 ①字符串 --->基本数据类型、包装类:调用相应的包装类的parseXxx(String str);  
-  	 ①基本数据类型、包装类--->字符串:调用字符串的重载的valueOf()方法  
+  	①字符串 --->基本数据类型、包装类:调用相应的包装类的parseXxx(String str);  
+  	①基本数据类型、包装类--->字符串:调用字符串的重载的valueOf()方法  
   2.2 字符串与字节数组间的转换   
-  	 ①字符串---->字节数组:调用字符串的getBytes()  
-  	 ②字节数组---->字符串：调用字符串的构造器  
+  	①字符串---->字节数组:调用字符串的getBytes()  
+  	②字节数组---->字符串：调用字符串的构造器  
   2.3 字符串与字符数组间的转换  
-    ①字符串---->字符数组：调用字符串的toCharArray();  
-    ②字符数组---->字符串:调用字符串的构造器  
+   ①字符串---->字符数组：调用字符串的toCharArray();  
+   ②字符数组---->字符串:调用字符串的构造器  
   2.4 String与StringBuffer的转换  
-  	①String --->StringBuffer：使用StringBuffer的构造器：new StringBuffer(String str);  
-  	②StringBuffer----->String:使用StringBuffer的toString()方法  
-    StringBuffer类：可变的字符序列  
-    StringBuilder类：可变的字符序列，jdk5.0新加入的，效率更高，线程不安全。  
-    常用的方法：添加：append(...) 删除 delete(int startIndex, int endIndex) 修改：setCharAt(int n ,char ch) 查询：charAt(int index)  
-  	插入:insert(int index, String str) 反转reverse() 长度：length()  
+  ①String --->StringBuffer：使用StringBuffer的构造器：new StringBuffer(String str);  
+  ②StringBuffer----->String:使用StringBuffer的toString()方法  
+   StringBuffer类：可变的字符序列  
+   StringBuilder类：可变的字符序列，jdk5.0新加入的，效率更高，线程不安全。  
+   常用的方法：添加：append(...) 删除 delete(int startIndex, int endIndex) 修改：setCharAt(int n ,char ch) 查询：charAt(int index)  
+  插入:insert(int index, String str) 反转reverse() 长度：length()  
   注：String类的不可变性：  
   ②System,Date,SimpleDateFormat,Calender  
   2.1System类  
@@ -492,9 +492,9 @@ boolean:false;
   当通过Class的实例调用getMethods() --->Method , getConstructors() ---->Constructor  
   1.4实例化Class的方法(三种):  
   ~~~
-        // 1.调用运行时类的.class属性  
-        Class clazz1 = Person.class;
-        System.out.println(clazz1);
+       // 1.调用运行时类的.class属性  
+       Class clazz1 = Person.class;
+       System.out.println(clazz1);
   		Class clazz2 = Creator.class;
   		System.out.println(clazz2);
   		// 2.通过运行时类的对象，调用其getClass()方法
@@ -659,7 +659,16 @@ boolean:false;
   URL的编程：统一资源定位符一个URL的对象，对应着互联网上一个资源。  
   //我们可以通过URL的对象调用其相应的方法，将此资源读取（“下载”）  
   
-  
+#### 二、Linux
+##### 1.Linux 的目录结构
+linux 目录是树状的.最上层是根目录"/".  
+根目录下:  
+/root ;/bin 系统使用的指令;/boot 启动linux使用的一些核心文件;  
+/dev 管理设备;/etc 所有的系统管理所需要的配置文件和子目录;  
+/home 存放普通用户信息;/var 不断变化的东西，如日志;/lib 系统开机需要的基本的动态连接共享库;  
+/usr 用户的应用程序和文件;/media U盘或光驱;/mnt 让用户临时挂载别的文件(共享文件);/opt 安装软件所放的目录;/sbin super用户使用的管理程序;  
+/tmp 存放临时文件;/selinux 与安全性相关;/lost+founf 系统非法关机时存放文件;/srv 一些服务启动以后需要的数据;  
+/proc 内核相关，系统内存的映射，访问该目录获取系统信息;/sys 安装2.6内核中新出现的文件系统;/usr/local 安装过后的目录;/selinux[security-enhanced linux] 安全子系统,能控制程序只访问特定的系统;
   
   
 
