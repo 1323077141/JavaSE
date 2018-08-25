@@ -20,8 +20,8 @@ public class TestLambda {
     //Lambda
     @Test
     public void test2(){
-         Comparator com = (x,y) ->Integer.compare(x,y);
-         TreeSet<Integer> ts = new TreeSet<>(com);
+//         Comparator com = (x,y) ->Integer.compare(x,y);
+//         TreeSet<Integer> ts = new TreeSet<>(com);
     }
 
     List<Employee> employees = Arrays.asList(
