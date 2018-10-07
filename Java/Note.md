@@ -983,14 +983,314 @@ tail:显示文件尾部内容，默认显示后10行.tail -n 5 文件:查看文�
  缺点: linux 启动后会自动获取IP,缺点是每次自动获取的ip 地址可能不一样。
  这个不适用于做服务器，因为我们的服务器的ip 需要时固定的  
  2).指定固定的ip  
- 直接修改配置文件来指定IP,并可以连接到外网,编辑vi /etc/sysconfig/network-scripts/ifcfg-eth0  
+ 直接修改配置文件来指定IP,并可以连接到外网,编辑vi /etc/sysconfig/network-scripts/ifcfg-eth0(ifcfg-Auto-eth0)    
+ 项目说明:  
+ DEVICE=eth0 接口名  
+ HWADDR MAC设备名  
+ TYPE 网络类型  
+ UUID 随机id  
+ ONBOOT系统启动时网络接口是否有效  
+ BOOTPROTO IP配置方法(none(不使用协议)|static(静态分配IP)|bootp(BOOTP协议)|dhcp(DHCP协议))  
+ IPADDR IP地址  
+ GATEWAY 网关  
+ DNS1 域名解析器  
  修改后，一定要重启服务  
  1) service network restart  
  2) reboot 重启系统  
  12. 进程管理  
  1). 显示系统执行的进程  
  ps ,一般来说使用的参数是ps -aux  
+ 显示参数:  
+ PID 进程识别号  
+ MEM 占用内存情况  
+ CPU 占用CPU  
+ VSZ 占用虚拟内存情况  
+ RSS 使用物理内存情况  
+ STAT S:休眠,R:运行  
+ START 启动时间  
+ TTY 终端机号  
+ TIME 此进程占用CPU总计时间  
+ COMMAND 正在执行的命令或进程名  
+ PPID 父进程  
+ 例子:  
+ ps -aux | more  
+ ps -aux | grep xxx(过滤)  
+ ps -ef | more:查看父进程  
+ 2)终止进程  
+ kill [选项]进程号(通过进程号杀死进程)  
+ killall 进程名称(通过名称杀死进程)  
+ kill -9 进程名(强制杀死进程)  
+ pstree [选项]进程树:-p 显示进程的PID，-u 显示进程的所属用户  
+ 3)服务管理  
+ 服务的本质就是进程，通常会监听某个端口，等待其他程序的请求，因此又称为守护进程。  
+ ①service 服务名 start|stop|restart|reload|status  
+ centos7.0之后，不是service,而是systemctl  
+ 例子:  
+ 查看防火墙转态:service iptables status  
+ 关闭防火墙:service iptables stop  
+ 开启防火墙:service iptables start  
+ 重启防火墙:service iptables restart  
+ telnet ip 端口号:检测端口是否在监听并且可以访问  
+ 设置某个服务永久自启动或者永久关闭:chkconfig指令  
+ ②查看服务名  
+ setup -> 系统服务(图形模式)  
+ ls -l /etc/init.d/(文本模式)  
+ ③运行级别  
+ 修改运行级别:vim /etc/inittab  
+ 修改服务运行级别:chkconfig 给每个服务的各个运行级别设置自启动或关闭  
+ chkconfig --list | grep xxx : 查看服务  
+ chkconfig 服务名 --list: 查看服务  
+ chkconfig --level 5 服务名 on/off:设置某个服务在运行级别为5的情况下，是否自启动  
+ chkconfig设置完，需重启  
+ 4)监控服务
+ ①动态监控进程  
+  top [选项] :与ps的区别在于执行一段时间可以更新正在运行的进程  
+  选项:-d 秒数 : 指定top更新的时间;-i 使top不显示任何闲置或僵死进程;
+  -p 通过指定监控进程ID来仅仅监控某个进程的状态  
+  交互操作说明:  
+  P 以CPU使用率排序，默认就是此项  
+  M 以内存使用率排序  
+  N 以PID进行排序  
+  q 退出top  
+  案例:  
+  监视特定用户:输入u，再输入用户名  
+  终止指定的进程:输入k，再输入进程号  
+  指定系统状态更新的时间(默认是3秒):top -d 10  
+ ②查看系统网络情况netstat  
+ netstat [选项]  
+ 选项:-an 按一定顺序排列输出;-p 显示哪个进程在调用  
+ netstat -anp | more  
+ netstat -anp | grep sshd  
+ 12.RPM和YUM包  
+ 1).RPM:Redhat Package Manager,用于互联网下载包的打包和安装工具,生成.rpm文件  
+ rpm -qa | grep xxx 查询已安装的RPM列表  
+ 查询结果:软件名-版本.在适用于centos 6.0x的64位系统  
+ rpm -q 软件包名:查询是否安装软件  
+ rpm -qi 软件包名:查询软件包信息  
+ rpm -ql 软件包名:查询软件包安装的文件  
+ rpm -qf 文件全路径名：查询文件所属的软件包  
+ 卸载rpm 包  
+ rpm -e RPM包名  
+ PS:当要删除的包被另外的包使用时，删除失败.此时 rpm -e --nodeps 包名  
+ 安装rpm包  
+ rpm -ivh RPM包名  
+ i=install,v=version(提示),h=hash(进度条)  
+ PS:安装firefox:  
+ ①先挂载上安装的ISO文件，进入media目录  
+ ②cp 安装包 /opt/  
+ ③rpm -ivh 包名.rpm  
+ 2)YUM包(能从指定服务器下载安装包，可以自动处理依赖性关系)  
+ yum list | grep xx 软件列表:查询是否有xx软件包  
+ yum install xxx 下载安装:安装指定的YUM包  
+ 13.JAVAEE  
+ /opt 目录(存放安装软件)  
+ 通过ftp将软件包放入opt目录下  
+ 1)jdk安装  
+ 解压缩 tar -zxvf w文件包  
+ 配置环境变量 vim /etc/profile:  
+ JAVA_HOME=/opt/jdk-10.0.2  
+ PATH=/opt/jdk-10.0.2/bin:$PATH  
+ export JAVA_HOME PATH  
+ 注销用户后，配置生效(3：logout;5: 图形注销)  
+ 2)Tomcat  
+ 解压缩到/opt下:  
+ 启动tomcat ./startup.sh:进入bin目录后,执行./startup.sh.此时本地http://localhost:8080/可以访问  
+ 开放端口 vim /etc/sysconfig/iptables:  
+ yy p复制一行,再修改为8080端口  
+ 重启防火墙:service iptables restart  
+ 至此，能从windows访问linux上的服务器  
+ 3)Mysql  
+ ①安装:  
+ 查询是否有mysql:rpm -qa | grep mysql  
+ 卸载mysql:rpm -e --nodeps mysql-libs  
+ 安装GCC：yum -y install make gcc-c++ cmake bison-devel ncurses-devel  
+ 解压缩mysql包,进入mysql目录后，进行源码编译:  
+ cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DMYSQL_DATADIR=/usr/local/mysql/data 
+ -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 
+ -DWITH_MEMORY_STORAGE_ENGINE=1 -DWITH_READLINE=1 
+ -DMYSQL_UNIX_ADDR=/var/lib/mysql/mysql.sock -DMYSQL_TCP_PORT=3306 
+ -DENABLED_LOCAL_INFILE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 
+ -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8 
+ -DDEFAULT_COLLATION=utf8_general_ci  
+ 编译安装:make && make install  
+ ②配置MySQL  
+ 设置权限:  
+ cat /etc/passwd 查看用户列表  
+ cat /etc/group  查看用户组列表  
+ 若无，则创建:  
+ groupadd mysql  
+ useradd -g mysql mysql  
+ 修改/usr/local/mysql权限:  
+ chown -R mysql:mysql /usr/local/mysql  
+ 初始化配置:  
+ cd /usr/local/mysql  
+ scripts/mysql_install_db --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --user=mysql  
+ ls -l /etc/my.cnf:若有，则mv /etc/my.cnf  
+ 启动mysql:(在 /usr/local/mysql 下执行)cp support-files/mysql.server /etc/init.d/mysql;  
+ chkconfig mysql on;  
+ service mysql start  
+ 修改密码:  
+ cd /usr/local/mysql/bin  
+ ./mysql -u root -p ,此时默认密码为空  
+ mysql> SET PASSWORD = PASSWORD('root');  
+ 配置mysql环境变量:  
+ vim /etc/profile:PATH=/opt/jdk-10.0.2/bin:/usr/local/mysql/bin/:$PATH  
+ 刷新配置: source /etc/profile  
+ 5)Eclipse  
+ 解压缩到/opt  
+ 启动eclipse,配置JRE和server:  
+ ①进入到eclipse文件，执行./eclipse  
+ ②图形界面方式  
+ 14.大数据  
+ shell:命令解释器,驱动linux内核;应用程序调用shell命令  
+ 1).Shell脚本的执行方式  
+ 脚本格式要求：  
+ 脚本以#!/bin/bash开头;脚本需要可执行权限  
+ 脚本的常用执行方式:  
+ ①赋予权限，执行:chmod 7xx yyyy.sh  
+ ②直接执行:sh ./myShell.sh  
+ 执行:相对路径 ./myShell.sh;绝对路径：/root/shell/myShell.sh
+ 2)Shell变量  
+ 变量分为系统变量(如$HOME,$PWD,$SHELL,$USER)和用户自定义变量(set指令显示当前shell中所有变量)  
+ ①定义:  
+ 定义变量:变量=值;  
+ 撤销变量：unset变量;  
+ 声明静态变量:readonly变量，不能unset  
+ 全局环境变量，可供其他shell程序使用:export 变量名=变量值  
+ 将命令的返回值赋值给变量:A=`ls -l /home`等价于A=$(ls -l /home)  
+ 等号两边不能有空格;  
+ 多行注释::<<!.....!
+ ②设置环境变量  
+ 将shell变量输出为环境变量:export 变量名=变量值  
+ 让修改后的配置信息立即生效:source 配置文件  
+ 查询环境变量值:echo $变量名  
+ 3)位置参数变量  
+ 当我们执行一个 shell 脚本时，如果希望获取到命令行的参数信息，就可以使用到位置参数变量，
+ 比如 ： ./myshell.sh100200, 这个就是一个执行 shell 的命令行，
+ 可以在 myshell 脚本中获取到参数信息   
+ $n（功能描述：n 为数字，$0 代表命令本身，$1-$9 代表第一到第九个参数，十以上的参数，十以上的参数需要用大括号包含，如${10}）  
+ $*（功能描述：这个变量代表命令行中所有的参数，$*把所有的参数看成一个整体）  
+ $@（功能描述：这个变量也代表命令行中所有的参数，不过$@把每个参数区分对待）  
+ $#（功能描述：这个变量代表命令行中所有参数的个数）  
+ 4)预定义变量  
+ 就是 shell 设计者事先已经定义好的变量，可以直接在 shell 脚本中使用  
+ $$（功能描述：当前进程的进程号（PID））  
+ $!（功能描述：后台运行的最后一个进程的进程号（PID））  
+ $？（功能描述：最后一次执行的命令的返回状态。如果这个变量的值为 0，证明上一个命令 正确执行；如果这个变量的值为非 0（具体是哪个数，由命令自己来决定），则证明上一个命令
+ 执行不正确了。）  
+ 5)运算符  
+ “$((运算式))”或“$[运算式]”   
+ expr m + n 注意 expr 运算符间要有空格   
+ expr m - n   
+ expr \*,/,%(乘，除，取余)  
+ 6)条件判断  
+ [ condition ]（注意 condition 前后要有空格）  
+ `#非空返回 true，可使用$?验证（0 为 true，>1 为 false）`  
+ 常用判断条件:  
+ ①两个整数的比较  
+ = 字符串比较  
+ -lt 小于  
+ -le 小于等于  
+ -eq 等于  
+ -gt 大于  
+ -ge 大于等于  
+ -ne 不等于   
+ ②按照文件权限进行比较  
+ -r 有读的权限 [-r 文件 ]  
+ -w 有写的权限  
+ -x 有执行的权限  
+ ③按照文件类型进行判断  
+ -f 文件存在并且是一个常规的文件  
+ -e 文件存在  
+ -d 文件存在并是一个目录
+ 7)流程控制  
+ ①if,if与中括号之间也必须有空格    
+ `if[ 条件判断式 ];then
+ 程序
+ fi`
+ 或  
+ `if[ 条件判断式 ] then
+ 程序 elif[条件判断式]
+ then
+ 程序
+ fi `  
+ 注意事项：  
+ (1)[ 条件判断式 ]，中括号和条件判断式之间必须有空格  
+ (2) 推荐使用第二种方式
+ ②case  
+ `
+ case$变量名 in "值 1"） 如果变量的值等于值 1，则执行程序 1 ;; "值 2"） 如果变量的值等于值 2，则执行程序 2 ;;
+ …省略其他分支… *）
+ 如果变量的值都不是以上的值，则执行此程序
+ ;;
+ esac
+ `  
+ ③for循环  
+ `
+ for 变量 in 值 1 值 2 值 3… do 
+ 程序 done
+ 或
+ for(( 初始值;循环控制条件;变量变化 )) do
+ 程序 done
+ `
+ ④while循环  
+ `
+ while[ 条件判断式 ] do
+ 程序 done
+ `
+ ⑤read控制台读入  
+ `
+ while[ 条件判断式 ] do
+ 程序 done
+ -p：指定读取值时的提示符； -t：指定读取值时等待的时间（秒），如果没有在指定的时间内输入，就不再等待了。。
+ 参数
+ 变量：指定读取值的变量名 
+ `  
+ ⑥函数  
+ 系统函数:  
+ 1.basename 基本语法 
+ 功能：返回完整路径最后 / 的部分，常用于获取文件名  
+ basename [pathname] [suffix]  
+ basename [string] [suffix] （功能描述：basename 命令会删掉所有的前缀包括最后一个（‘/’）
+ 字符，然后将字符串显示出来。  
+ 选项:suffix 为后缀，如果 suffix 被指定了，
+ basename 会将 pathname 或 string 中的 suffix 去掉。  
+ 2.dirname 基本语法  
+ 功能：返回完整路径最后 / 的前面的部分，常用于返回路径部分 dirname 文件绝对路径   
+ （功能描述：从给定的包含绝对路径的文件名中去除文件名（非目录的部分），
+ 然后返回剩下的路径（目录的部分））   
+ 系统函数:  
+ 基本语法  
+ [ function ] funname[()] 
+ {
+    Action; 
+    [return int;]
+ }
+ 调用直接写函数名：funname [值]
+ 案例:  
+ 需求分析  
+ 1)每天凌晨 2:10 备份 数据库 atguiguDB 到 /data/backup/db  
+ 2)备份开始和备份结束能够给出相应的提示信息  
+ 3)备份后的文件要求以备份时间为文件名，并打包成 .tar.gz 的形式，
+ 比如： 2018-03-12_230201.tar.gz   
+ 4) 在备份的同时，检查是否有 10 天前备份的数据库文件，如果有就将其删除。  
+ `
  
+ `
+ 
+ 
+ 15.Python  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
 
  
  
