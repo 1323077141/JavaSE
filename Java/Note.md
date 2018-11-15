@@ -1273,11 +1273,46 @@ tail:显示文件尾部内容，默认显示后10行.tail -n 5 文件:查看文�
  比如： 2018-03-12_230201.tar.gz   
  4) 在备份的同时，检查是否有 10 天前备份的数据库文件，如果有就将其删除。  
  `
+ 在/usr/sbin目录创建数据库备份脚本:mysql_db_backup.sh(必须拥有相当高的权限):
+ echo "=========开始备份============"
+ echo "数据库备份的路径是 $BACKUP/$DATETIME.tar.gz"
+ 
+ #本机
+ HOST=localhost
+ #用户名
+ DB_USER=root
+ #密码
+ DB_PWD=root
+ #备份数据库名
+ DATEBASE=myDB
+ #创建备份的路径
+ #若备份的路径存在，则使用；否则创建
+ [ ! -d "$BACKUP/$DATETIME" ] && mkdir -p "$BACKUP/$DATETIME"
+ 
+ #执行mysql的备份数据库指令
+ mysqldump -u$DB_USER -p$DB_PWD --host=$HOST $DATEBASE | gzip > $BACKUP/$DATETIME/$DATETIME.sql.gz
+ 
+ #打包备份文件
+ cd $BACKUP
+ tar -zcvf $DATETIME.tar.gz $DATETIME
+ 
+ #删除临时目录
+ rm -rf $BACKUP/$DATETIME
+ 
+ 
+ #删除十天前的备份文件
+ find $BACKUP -mtime + 10 -name "*.tar.gz" -exec rm -rf {} \;
+ echo "===========备份文件成功=============="
+
+ 
+ 将sh脚本加入至定时任务:
+ crontab -e:
+ 10 2 * * * /usr/sbin/mysql_db_backup.sh
  
  `
  
- 
  15.Python  
+ 
  
  
  
@@ -1322,12 +1357,21 @@ tail:显示文件尾部内容，默认显示后10行.tail -n 5 文件:查看文�
   
 
 #### 三.MySQL
-#### 1.Mysql命令
+#### 1.Mysql命令                                          
 #### 2.查询
 
     
-  
-  
+### JavaWeb
+####一.WEB基础
+#####1.开发目录
+WEB根目录/WEB-INF/classes(编译后的.class文件),lib(lib文件),web.xml(配置文件)  
+可通过Java Build Path将 Default output folder改为classes文件下  
+#####2.Servlet
+Servlet运行在Servlet容器中,Servlet容器负责Servlet和客户的通信以及调用Servlet方法  
+Servlet 可完成:创建并返回基于 客户请求的动态HTML页面;创建可嵌入到现有HTML页面中的部分HTML页面;
+与其他服务器资源(数据库或者基于JAVA的程序应用)进行通信.  
+
+
  
 
 
