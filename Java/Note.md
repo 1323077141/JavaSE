@@ -1367,11 +1367,127 @@ tail:显示文件尾部内容，默认显示后10行.tail -n 5 文件:查看文�
 WEB根目录/WEB-INF/classes(编译后的.class文件),lib(lib文件),web.xml(配置文件)  
 可通过Java Build Path将 Default output folder改为classes文件下  
 #####2.Servlet
-Servlet运行在Servlet容器中,Servlet容器负责Servlet和客户的通信以及调用Servlet方法  
+1.Servlet运行在Servlet容器中,Servlet容器负责Servlet和客户的通信以及调用Servlet方法  
 Servlet 可完成:创建并返回基于 客户请求的动态HTML页面;创建可嵌入到现有HTML页面中的部分HTML页面;
 与其他服务器资源(数据库或者基于JAVA的程序应用)进行通信.  
+2.Servlet容器响应客户请求的过程  
+1)Servlet引擎检查是否已经装载并创建了该Servlet的实例对象。  
+如果是，则直接执行第四步，否则直接执行第二步  
+2)装载并创建该Servlet的一个实例对象:调用该Servlet的构造器  
+3)调用Servlet实例对象的init()方法  
+4)创建一个用于封装请求的ServletRequest对象和一个代表响应消息的ServletResponse对象，
+然后调用Servlet的service()的方法并将请求和响应对象作为参数传递进去。  
+5)WEB应用程序被停止或重新启动之前，Servlet引擎将卸载Servlet,
+并在卸载之前调用Servlet的destroy()方法。 
+3.Servlet实例  
+1)创建一个Servlet接口的实现类(implements Servlet)  
+2)在web.xml中配置和映射这个Servlet(通过WEB访问JAVA类)  
+`
+    <servlet>
+        <servlet-name>helloServlet</servlet-name>
+        <servlet-class>servlet.com.atguigu.servlet1.HelloServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>helloServlet</servlet-name>
+        <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+或者
+    <servlet>
+        <servlet-name>helloServlet</servlet-name>
+        <servlet-class>servlet.com.atguigu.servlet1.HelloServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    ps:/hello中的/代表WEB根目录，与http://localhost:8080/web/等同.
+`
+一个Servlet可以有多个Servlet-mapping
+4.Servlet生命周期   Xc
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv【【b-p-p-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\.hyjty3C                                                         ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,M=---------------
+Servlet容器可以创建Servlet,并调用Servlet的相关生命周期方法;  
+JSP,Filter,Listener,Tag...与Servlet相同  
+生命周期相关方法:  
+1).构造器:只被调用一次。只有第一次请求Servlet时创建Servlet实例，调用构造器(单实例,线程安全)  
+2).init():只被调用一次。在创建好实例后，立即被调用，用于初始化当前Servlet.  
+3).service():被多次调动，每次请求都会调用Service方法。用于响应请求的。  
+4).destroy():只被调用一次，在当前Servlet所在的WEB应用被卸载前调用，用于释放当前Servlet所占用的资源.   
+5.load-on-startup 参数:指定被Servlet创建的时机  
+1).配置在Servlet节点中  
+2).可以指定Servlet被创建的时机，若为负数，则在第一次请求时被创建;
+若为0或正数,则在当前WEB应用被Servlet容器加载时被创建实例,且数值越小越早被创建.  
  
+
+
+
+
+
+
+
+
 
 
