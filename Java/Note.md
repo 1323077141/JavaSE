@@ -1319,40 +1319,21 @@ tail:显示文件尾部内容，默认显示后10行.tail -n 5 文件:查看文�
  
  
  
- 
- 
- 
- 
-  
 
  
  
-   
  
  
  
  
  
- 
- 
- 
- 
- 
- 
- 
- 
- 
-   
- 
- 
-  
+####Java实战  
 
  
-
-
-
-
-
+ 
+ 
+ 
+ 
   
   
 
@@ -1401,74 +1382,7 @@ Servlet 可完成:创建并返回基于 客户请求的动态HTML页面;创建�
     ps:/hello中的/代表WEB根目录，与http://localhost:8080/web/等同.
 `
 一个Servlet可以有多个Servlet-mapping
-4.Servlet生命周期   Xc
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv【【b-p-p-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\.hyjty3C                                                         ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,M=---------------
+4.Servlet生命周期   
 Servlet容器可以创建Servlet,并调用Servlet的相关生命周期方法;  
 JSP,Filter,Listener,Tag...与Servlet相同  
 生命周期相关方法:  
