@@ -1403,74 +1403,7 @@ Servlet 可完成:创建并返回基于 客户请求的动态HTML页面;创建�
     ps:/hello中的/代表WEB根目录，与http://localhost:8080/web/等同.
 `
 一个Servlet可以有多个Servlet-mapping
-4.Servlet生命周期   Xc
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv【【b-p-p-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\.hyjty3C                                                         ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,M=---------------
+4.Servlet生命周期  
 Servlet容器可以创建Servlet,并调用Servlet的相关生命周期方法;  
 JSP,Filter,Listener,Tag...与Servlet相同  
 生命周期相关方法:  
@@ -1478,10 +1411,45 @@ JSP,Filter,Listener,Tag...与Servlet相同
 2).init():只被调用一次。在创建好实例后，立即被调用，用于初始化当前Servlet.  
 3).service():被多次调动，每次请求都会调用Service方法。用于响应请求的。  
 4).destroy():只被调用一次，在当前Servlet所在的WEB应用被卸载前调用，用于释放当前Servlet所占用的资源.   
+
 5.load-on-startup 参数:指定被Servlet创建的时机  
 1).配置在Servlet节点中  
-2).可以指定Servlet被创建的时机，若为负数，则在第一次请求时被创建;
+2).可以指定Servlet被创建的时机，若为负数，则不在加载容器时，而在第一次请求时被创建;
 若为0或正数,则在当前WEB应用被Servlet容器加载时被创建实例,且数值越小越早被创建.  
+
+6.ServletConfig:封装Servlet的配置信息，并且可以获取ServletContext对象  
+方法： 
+1)配置初始化参数:  
+`
+<servlet>
+    <!--必须在 load-on-startup 节点前-->
+    <init-param>
+        <param-name>user</param-name>
+        <param-value>root</param-value>
+    </init-param>
+    
+    <init-param>
+        <param-name>password</param-name>
+        <param-value>1230</param-value>
+    </init-param>
+    
+    <load-on-startup>-1</load-on-startup>
+</servlet>
+`
+2).获取初始化参数:  
+①getInitParameter(String name):获取指定参数名的初始化参数  
+②getInitParameterNames():获取参数名组成的Enumeration对象  
+3).获取Servlet的配置名称(了解)    
+getServletName():获取WEB.xml中Servlet注册的名字  
+7.ServletContext:获取Servlet上下文  
+1).由ServletConfig获取到  
+2).Servlet引擎为每个WEB应用程序都创建一个对应的的ServletContext对象,
+由于一个WEB应用中所有的Servlet都共享同一个ServletContext对象，所以，ServletContext对象
+被称为application对象(WEB应用程序对象)  
+重要:getServletContext()
+
+5)
+
  
 
 
