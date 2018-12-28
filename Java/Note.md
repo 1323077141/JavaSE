@@ -1240,8 +1240,6 @@ tail:显示文件尾部内容，默认显示后10行.tail -n 5 文件:查看文�
  `
  ⑤read控制台读入  
  `
- while[ 条件判断式 ] do
- 程序 done
  -p：指定读取值时的提示符； -t：指定读取值时等待的时间（秒），如果没有在指定的时间内输入，就不再等待了。。
  参数
  变量：指定读取值的变量名 
@@ -1321,40 +1319,21 @@ tail:显示文件尾部内容，默认显示后10行.tail -n 5 文件:查看文�
  
  
  
- 
- 
- 
- 
-  
 
  
  
-   
  
  
  
  
  
- 
- 
- 
- 
- 
- 
- 
- 
- 
-   
- 
- 
-  
+####Java实战  
 
  
-
-
-
-
-
+ 
+ 
+ 
+ 
   
   
 
@@ -1403,7 +1382,11 @@ Servlet 可完成:创建并返回基于 客户请求的动态HTML页面;创建�
     ps:/hello中的/代表WEB根目录，与http://localhost:8080/web/等同.
 `
 一个Servlet可以有多个Servlet-mapping
+<<<<<<< HEAD
 4.Servlet生命周期  
+=======
+4.Servlet生命周期   
+>>>>>>> cd8c192298b822e8630633ce0462c91c1233b513
 Servlet容器可以创建Servlet,并调用Servlet的相关生命周期方法;  
 JSP,Filter,Listener,Tag...与Servlet相同  
 生命周期相关方法:  
