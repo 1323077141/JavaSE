@@ -2,7 +2,9 @@ package com.servlet.myServlet;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.Map;
 
@@ -89,7 +91,16 @@ public class loginServlet implements Servlet {
                 ip = ipStr;
             }
         }
+        System.out.println(ip);
 
+
+        //ServletResponse
+        PrintWriter out = servletResponse.getWriter();
+        out.print("helloworld.....");
+
+        servletResponse.setContentType("application/msword");   //word格式
+
+        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
 
 
 

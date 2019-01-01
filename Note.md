@@ -1490,8 +1490,9 @@ HttpServletRequest.getRequestURI
 HttpServletRequest.getMethod  
 ④和 attribute 相关的方法:  
   
-3)HttpServletRequest:是SerletRequest的子接口，针对于HTTP请求所定义，
+⑤HttpServletRequest:是SerletRequest的子接口，针对于HTTP请求所定义，
 里边包含了大量获取HTTP请求相关的方法  
+PS:
 `
 获取客户端真实IP(在Tomcat或者Nginx的反向代理后，IP会发生变化,getRemoteAddr()获取到的是反向代理的IP)
         String ipStr = httpServletRequest.getRemoteAddr();
@@ -1530,6 +1531,14 @@ HttpServletRequest.getMethod
         }
 
 `
+
+3)ServletResponse:  
+①.getWriter():返回PrintWriter对象，调用print()方法，并将print()中的参数直接打印  
+②.setContentType:设置响应的内容类型  
+③.HttpServletResponse：是SerletResponse的子接口，针对于HTTP请求所定义，
+里边包含了大量获取HTTP请求相关的方法  
+HttpServletResponse.sendRedirect(String location):重定向  
+
 
 
 
