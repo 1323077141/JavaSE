@@ -1,11 +1,11 @@
-package servlet.com.atguigu.servlet1;
+package com.servlet.myServlet;
 
 import javax.servlet.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 
-public class HelloServlet implements Servlet{
-
+public class HelloServlet implements Servlet {
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
         System.out.println("init...");
@@ -22,6 +22,13 @@ public class HelloServlet implements Servlet{
 
         //获取ServletContext对象
         ServletContext servletContext = servletConfig.getServletContext();
+        servletContext.getInitParameter("driver");
+        Enumeration<String> names2 =  servletContext.getInitParameterNames();
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream is = classLoader.getResourceAsStream("jdbc.properties");
+
+
 
 
     }
@@ -51,5 +58,4 @@ public class HelloServlet implements Servlet{
     public HelloServlet(){
         System.out.println("HelloServlet's constructor....");
     }
-
 }

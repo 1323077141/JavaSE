@@ -3,17 +3,33 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
+    <!--配置当前WEB应用的初始化参数-->
+    <context-param>
+        <param-name>driver</param-name>
+        <param-value>com.jdbc.mysql.Driver</param-value>
+    </context-param>
 
     <!--配置和映射 Servlet -->
     <servlet>
         <servlet-name>helloServlet</servlet-name>
-        <servlet-class>servlet.com.atguigu.servlet1.HelloServlet</servlet-class>
+        <servlet-class>com.servlet.myServlet.HelloServlet</servlet-class>
+
+        <!--配置Servlet初始化参数-->
+        <init-param>
+            <param-name>user</param-name>
+            <param-value>root</param-value>
+        </init-param>
+
+        <load-on-startup>1</load-on-startup>
     </servlet>
-    
+
     <servlet-mapping>
         <servlet-name>helloServlet</servlet-name>
         <url-pattern>/hello</url-pattern>
     </servlet-mapping>
+
+
+
 
 
 

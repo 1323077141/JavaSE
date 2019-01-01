@@ -1424,14 +1424,55 @@ JSP,Filter,Listener,Tag...与Servlet相同
 ②getInitParameterNames():获取参数名组成的Enumeration对象  
 3).获取Servlet的配置名称(了解)    
 getServletName():获取WEB.xml中Servlet注册的名字  
+4).重要:getServletContext()：获取Servlet上下文  
 7.ServletContext:获取Servlet上下文  
 1).由ServletConfig获取到  
 2).Servlet引擎为每个WEB应用程序都创建一个对应的的ServletContext对象,
 由于一个WEB应用中所有的Servlet都共享同一个ServletContext对象，所以，ServletContext对象
 被称为application对象(WEB应用程序对象)  
-重要:getServletContext()
+①配置当前WEB应用的初始化参数：  
+`
+<context-param>
+    <param-name>driver</param-name>
+    <param-value>com.mysql.jdbc.Driver</param-value>
+</context-param>
+<context-param>
+    <param-name>user</param-name>
+    <param-value>root</param-value>
+</context-param>
+`  
+①获取当前WEB应用的初始化参数:  
+`
+servletContext.getInitParameter("driver");
+Enumeration<String> names =  servletContext.getInitParameterNames();
+while (names.hasMoreElements()){
+     String name = names.nextElement();
+     System.out.println(servletConfig.getInitParameter(name));
+}
+`  
+ps:Servlet中的初始化参数是局部的，只有当前Servlet能使用，
+Context中的初始化参数是全局的，任何Servlet能使用  
 
-5)
+③获取当前WEB应用的某一个文件的绝对路径  
+getRealPath("/note.txt");  
+//D:\soft\IDEA\codes\JavaSE\WebContent\note.txt   
+获取到的是部署后的路径。  
+
+④获取当前WEB应用的名称  
+getContextPath():/JavaWeb  
+
+⑤获取当前WEB应用的某一个文件对应的输入流：  
+getResourceAsStream(String path):path的/为当前WEB应用的根目录  
+
+⑥和attribute相关的重要方法:  
+getAttribute();getAttributeNames();removeAttribute();setAttribute()  
+
+8.ServletRequest  
+在Servlet中获取请求信息:  
+1)Servlet中的service() 方法用于应答请求：每次请求都会调用 service() 方法  
+2)
+
+
 
  
 
