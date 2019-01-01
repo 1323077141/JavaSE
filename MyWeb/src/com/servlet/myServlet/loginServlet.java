@@ -53,6 +53,43 @@ public class loginServlet implements Servlet {
         String servletPath = httpServletRequest.getServletPath();
         System.out.println(servletPath); //   /loginservlet
 
+        //获取客户端真实IP(在Tomcat或者Nginx的反向代理后，IP会发生变化,getRemoteAddr()获取到的是反向代理的IP)
+
+        String ipStr = httpServletRequest.getRemoteAddr();
+        if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
+            ipStr = httpServletRequest.getHeader("X-FORWARDED-FOR ");
+            //通过了HTTP代理或者负载均衡服务器时才会添加该项
+            //格式为X-Forwarded-For:client1,proxy1,proxy2，
+            // 一般情况下，第一个ipStr为客户端真实ipStr，后面的为经过的代理服务器ipStr。
+        }else if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
+            ipStr = httpServletRequest.getHeader("Proxy-Client-IP");
+            //这个一般是经过apache http服务器的请求才会有，用apache http做代理时一般会加上Proxy-Client-IP请求头
+
+        }else if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
+
+            ipStr = httpServletRequest.getHeader("WL-Proxy-Client-IP");
+            // 而WL-Proxy-Client-IP是apache http服务器的weblogic插件加上的头
+
+        }else if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
+            ipStr = httpServletRequest.getHeader("HTTP_CLIENT_IP");
+            //有些代理服务器会加上此请求头
+
+        }else if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
+            ipStr = httpServletRequest.getHeader("X-Real-IP");
+            //nginx代理一般会加上此请求头
+
+        }else{
+            ipStr = httpServletRequest.getRemoteAddr();
+        }
+        String ip = "";
+        if (ipStr != null || ipStr.length() != 0){
+            if (ipStr.contains(",")){
+                ip = ipStr.split(",")[0];
+            }else{
+                ip = ipStr;
+            }
+        }
+
 
 
 
