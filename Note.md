@@ -1467,10 +1467,32 @@ getResourceAsStream(String path):path的/为当前WEB应用的根目录
 ⑥和attribute相关的重要方法:  
 getAttribute();getAttributeNames();removeAttribute();setAttribute()  
 
-8.ServletRequest  
+8.从Servlet中获取请求信息     
 在Servlet中获取请求信息:  
 1)Servlet中的service() 方法用于应答请求：每次请求都会调用 service() 方法  
-2)
+ServletRequest:封装了请求信息.可以从其中获取到任何的请求信息.  
+ServletResponse:封装了响应信息.如果给用户什么响应，就使用该接口的方法实现.  
+这两个接口的实现类都是服务器给与的，并在服务器调用service时传入  
+2)ServletRequest:  
+①获取请求参数:  
+String getParameter(String name):根据请求参数的名字，返回参数值;
+当同名的请求参数有多个时，该方法只能获取一个提交的值  
+String[]  getParameterValues(String name):
+根据请求参数名获取请求参数对应的字符串数组(多选);
+当同名的请求参数有多个时，该方法能获取全部值    
+Enumeration getParameterNames():返回参数名对应的Enumeration对象,
+类似于ServletConfig(或ServletContext)的getInitParameterNames()  
+Map getParameterMap():返回请求参数的键值对(key:参数名 value:参数值(数组类型))   
+与HTTP请求相关的方法可以强转为HttpServletRequest:  
+②获取请求的URL：  
+HttpServletRequest.getRequestURI
+③获取请求方式
+HttpServletRequest.getMethod  
+④和 attribute 相关的方法:  
+  
+3)HttpServletRequest:是SerletRequest的子接口，针对于HTTP请求所定义，
+里边包含了大量获取HTTP请求相关的方法  
+
 
 
 

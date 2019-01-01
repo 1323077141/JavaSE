@@ -28,7 +28,16 @@
         <url-pattern>/hello</url-pattern>
     </servlet-mapping>
 
-
+    
+    <servlet>
+        <servlet-name>loginServlet</servlet-name>
+        <servlet-class>com.servlet.myServlet.loginServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>loginServlet</servlet-name>
+        <url-pattern>/loginServlet</url-pattern>
+    </servlet-mapping>
 
 
 

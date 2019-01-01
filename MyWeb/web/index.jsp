@@ -15,8 +15,15 @@
   <form action="loginServlet" method="post">
     user:<input type="text" name ="user" />
     password:<input type="password" name="password" />
-    <<input type="submit" value="提交" />
 
+    <br><br>
+    insteresting:
+    <input type="checkbox" name="insteresting" value="reading" /> reading
+    <input type="checkbox" name="insteresting" value="game" /> game
+    <input type="checkbox" name="insteresting" value="party" /> party
+    <input type="checkbox" name="insteresting" value="shopping" /> shopping
+
+    <input type="submit" value="提交" />
 
   </form>
 
