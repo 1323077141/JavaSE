@@ -40,6 +40,24 @@
     </servlet-mapping>
 
 
+    <servlet>
+        <description></description>
+        <display-name>CustomerServlet</display-name>
+        <servlet-name>CustomerServlet</servlet-name>
+        <servlet-class>com.atguigu.mvcapp.servlet.CustomerServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CustomerServlet</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>InitServlet</servlet-name>
+        <servlet-class>com.atguigu.mvcapp.servlet.InitServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
 
 
 </web-app>

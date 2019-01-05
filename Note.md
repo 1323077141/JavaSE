@@ -1368,7 +1368,6 @@ Servlet 可完成:创建并返回基于 客户请求的动态HTML页面;创建�
         <servlet-name>helloServlet</servlet-name>
         <servlet-class>servlet.com.atguigu.servlet1.HelloServlet</servlet-class>
     </servlet>
-    
     <servlet-mapping>
         <servlet-name>helloServlet</servlet-name>
         <url-pattern>/hello</url-pattern>
@@ -1382,11 +1381,8 @@ Servlet 可完成:创建并返回基于 客户请求的动态HTML页面;创建�
     ps:/hello中的/代表WEB根目录，与http://localhost:8080/web/等同.
 `
 一个Servlet可以有多个Servlet-mapping
-<<<<<<< HEAD
-4.Servlet生命周期  
-=======
+
 4.Servlet生命周期   
->>>>>>> cd8c192298b822e8630633ce0462c91c1233b513
 Servlet容器可以创建Servlet,并调用Servlet的相关生命周期方法;  
 JSP,Filter,Listener,Tag...与Servlet相同  
 生命周期相关方法:  
@@ -1410,12 +1406,10 @@ JSP,Filter,Listener,Tag...与Servlet相同
         <param-name>user</param-name>
         <param-value>root</param-value>
     </init-param>
-    
     <init-param>
         <param-name>password</param-name>
         <param-value>1230</param-value>
     </init-param>
-    
     <load-on-startup>-1</load-on-startup>
 </servlet>
 `
@@ -1433,8 +1427,8 @@ getServletName():获取WEB.xml中Servlet注册的名字
 ①配置当前WEB应用的初始化参数：  
 `
 <context-param>
-    <param-name>driver</param-name>
-    <param-value>com.mysql.jdbc.Driver</param-value>
+<param-name>driver</param-name>
+ <param-value>com.mysql.jdbc.Driver</param-value>
 </context-param>
 <context-param>
     <param-name>user</param-name>
@@ -1495,41 +1489,35 @@ HttpServletRequest.getMethod
 PS:
 `
 获取客户端真实IP(在Tomcat或者Nginx的反向代理后，IP会发生变化,getRemoteAddr()获取到的是反向代理的IP)
-        String ipStr = httpServletRequest.getRemoteAddr();
-        if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
-            ipStr = httpServletRequest.getHeader("X-FORWARDED-FOR ");
-            //通过了HTTP代理或者负载均衡服务器时才会添加该项
-            //格式为X-Forwarded-For:client1,proxy1,proxy2，
-            // 一般情况下，第一个ipStr为客户端真实ipStr，后面的为经过的代理服务器ipStr。
-        }else if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
-            ipStr = httpServletRequest.getHeader("Proxy-Client-IP");
-            //这个一般是经过apache http服务器的请求才会有，用apache http做代理时一般会加上Proxy-Client-IP请求头
-
-        }else if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
-
-            ipStr = httpServletRequest.getHeader("WL-Proxy-Client-IP");
-            // 而WL-Proxy-Client-IP是apache http服务器的weblogic插件加上的头
-
-        }else if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
-            ipStr = httpServletRequest.getHeader("HTTP_CLIENT_IP");
-            //有些代理服务器会加上此请求头
-
-        }else if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
-            ipStr = httpServletRequest.getHeader("X-Real-IP");
-            //nginx代理一般会加上此请求头
-
-        }else{
-            ipStr = httpServletRequest.getRemoteAddr();
-        }
-        String ip = "";
-        if (ipStr != null || ipStr.length() != 0){
-            if (ipStr.contains(",")){
-                ip = ipStr.split(",")[0];
-            }else{
-                ip = ipStr;
-            }
-        }
-
+String ipStr = httpServletRequest.getRemoteAddr();
+if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
+ipStr = httpServletRequest.getHeader("X-FORWARDED-FOR ");
+//通过了HTTP代理或者负载均衡服务器时才会添加该项
+//格式为X-Forwarded-For:client1,proxy1,proxy2，
+// 一般情况下，第一个ipStr为客户端真实ipStr，后面的为经过的代理服务器ipStr。
+ }else if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
+ipStr = httpServletRequest.getHeader("Proxy-Client-IP");
+//这个一般是经过apache http服务器的请求才会有，用apache http做代理时一般会加上Proxy-Client-IP请求头
+}else if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
+ipStr = httpServletRequest.getHeader("WL-Proxy-Client-IP");
+// 而WL-Proxy-Client-IP是apache http服务器的weblogic插件加上的头
+}else if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
+ipStr = httpServletRequest.getHeader("HTTP_CLIENT_IP");
+//有些代理服务器会加上此请求头
+}else if (ipStr == null || ipStr.length() == 0 || "unkown".equalsIgnoreCase(ipStr)){
+ipStr = httpServletRequest.getHeader("X-Real-IP");
+//nginx代理一般会加上此请求头
+}else{
+ipStr = httpServletRequest.getRemoteAddr();
+}
+String ip = "";
+if (ipStr != null || ipStr.length() != 0){
+if (ipStr.contains(",")){
+ip = ipStr.split(",")[0];
+}else{
+ip = ipStr;
+}
+}
 `
 
 3)ServletResponse:  
@@ -1538,6 +1526,308 @@ PS:
 ③.HttpServletResponse：是SerletResponse的子接口，针对于HTTP请求所定义，
 里边包含了大量获取HTTP请求相关的方法  
 HttpServletResponse.sendRedirect(String location):重定向  
+4)GenericServlet  
+1). 是一个 Serlvet. 是 Servlet 接口和 ServletConfig 接口的实现类. 
+但是一个抽象类. 其中的 service 方法为抽象方法  
+2). 如果新建的 Servlet 程序直接继承 GenericSerlvet 会使开发更简洁.  
+3). 具体实现:  
+①. 在 GenericServlet 中声明了一个 SerlvetConfig 类型的成员变量,
+ 在 init(ServletConfig) 方法中对其进行了初始化   
+②. 利用 servletConfig 成员变量的方法实现了 ServletConfig 接口的方法  
+③. 还定义了一个 init() 方法, 在 init(SerlvetConfig) 方法中对其进行调用, 
+子类可以直接覆盖 init() 在其中实现对 Servlet 的初始化.   
+④. 不建议直接覆盖 init(ServletConfig), 因为如果忘记编写 super.init(config); 
+而还是用了 SerlvetConfig 接口的方法,则会出现空指针异常.   
+⑤. 新建的 init(){} 并非 Serlvet 的生命周期方法. 
+而 init(ServletConfig) 是生命周期相关的方法.    
+public abstract class GenericServlet implements Servlet, ServletConfig  
+5)HttpServlet   
+1). 是一个 Servlet, 继承自 GenericServlet. 针对于 HTTP 协议所定制.   
+2). 在 service() 方法中直接把 ServletReuqest 和  ServletResponse 
+转为 HttpServletRequest 和 HttpServletResponse.
+并调用了重载的 service(HttpServletRequest, HttpServletResponse)  
+在 service(HttpServletRequest, HttpServletResponse) 
+获取了请求方式: request.getMethod(). 根据请求方式有创建了
+doXxx() 方法(xxx 为具体的请求方式, 比如 doGet, doPost)  
+`
+@Override
+ public void service(ServletRequest req, ServletResponse res)
+    throws ServletException, IOException {
+    HttpServletRequest  request;
+    HttpServletResponse response;
+    try {
+        request = (HttpServletRequest) req;
+        response = (HttpServletResponse) res;
+    } catch (ClassCastException e) {
+        throw new ServletException("non-HTTP request or response");
+    }
+    service(request, response);
+}
+public void service(HttpServletRequest request, HttpServletResponse response)
+throws ServletException, IOException {}
+`
+5)请求的转发和重定向    
+1). 本质区别: 请求的转发只发出了一次请求, 而重定向则发出了两次请求.   
+具体:  
+①. 请求的转发: 地址栏是初次发出请求的地址.  
+请求的重定向: 地址栏不再是初次发出的请求地址. 地址栏为最后响应的那个地址   
+②.请求转发: 在最终的 Servlet 中, request 对象和中转的那个 request 是同一个对象.   
+请求的重定向: 在最终的 Servlet 中, request 对象和中转的那个 request 不是同一个对象.         
+③.请求的转发: 只能转发给当前 WEB 应用的的资源  
+请求的重定向: 可以重定向到任何资源.   
+④.请求的转发: / 代表的是当前 WEB 应用的根目录  
+请求的重定向: / 代表的是当前 WEB 站点的根目录.   
+6)JSP:  
+(1. WHY:   
+JSP 是简 Servlet 编写的一种技术, 它将 Java 代码和 HTML 语句混合在同一个文件中编写,  
+只对网页中的要动态产生的内容采用 Java 代码来编写，
+而对固定不变的静态内容采用普通静态 HTML 页面的方式编写。   
+(2. Java Server Page: Java 服务器端网页. 在 HTML 页面中编写 Java 代码的页面.   
+helloworld:   
+新建一个 JSP 页面, 在 body 节点内的 <% %> 即可编写 Java 代码.
+(3. JSP 可以放置在 WEB 应用程序中的除了 WEB-INF 及其子目录外的其他任何目录中,
+JSP 页面的访问路径与普通 HTML 页面的访问路径形式也完全一样。  
+(4. JSP的运行原理: JSP 本质上是一个 Servlet.  
+每个JSP 页面在第一次被访问时, JSP 引擎将它翻译成一个 Servlet 源程序, 
+接着再把这个 Servlet 源程序编译成 Servlet 的 class 类文件.  
+然后再由WEB容器（Servlet引擎）像调用普通Servlet程序一样的方式来装载和解释执行
+这个由JSP页面翻译成的Servlet程序。   
+(5. JSP 页面的隐含变量: 没有声明就可以使用的对象. JSP页面一共有 9 个隐含对象.   
+`
+public void _jspService(HttpServletRequest request, HttpServletResponse response)
+throws java.io.IOException, ServletException {
+PageContext pageContext = null;
+HttpSession session = null;
+ServletContext application = null;
+ServletConfig config = null;
+JspWriter out = null;
+Object page = this;
+//使用  <% %> 编写的代码在此位置. 可以用到 request, response, pageContext, session
+//application, config, out, page 这 8 个隐含对象. (实际上还可以使用一个叫 exception 的隐含对象)
+}    
+`
+①. request: HttpServletRequest 的一个对象. *  
+②. response: HttpServletResponse 的一个对象
+(在 JSP 页面中几乎不会调用 response 的任何方法.)  
+③. pageContext: 页面的上下文, 是 PageContext 的一个对象. 
+可以从该对象中获取到其他 8 个隐含对象. 也可以从中获取到当前
+页面的其他信息. (学习自定义标签时使用它) *  
+④. session: 代表浏览器和服务器的一次会话, 是 HttpSession 的一个对象. 后面详细学习. *  
+⑤. application: 代表当前 WEB 应用. 是 ServletContext 对象. *  
+⑥. config: 当前 JSP 对应的 Servlet 的 ServletConfig 对象(几乎不使用). 
+若需要访问当前 JSP 配置的初始化参数, 需要通过映射的地址才可以.  
+映射 JSP:  
+`
+ <servlet>
+  <servlet-name>hellojsp</servlet-name>
+  <jsp-file>/hello.jsp</jsp-file>
+  <init-param>
+  	<param-name>test</param-name>
+  	<param-value>testValue</param-value>
+  	</init-param>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>hellojsp</servlet-name>
+	<url-pattern>/hellojsp</url-pattern>  	
+  </servlet-mapping>
+`
+⑦. out: JspWriter 对象. 调用 out.println() 可以直接把字符串打印到浏览器上. *  
+⑧. page: 指向当前 JSP 对应的 Servlet 对象的引用, 但为 Object 类型, 
+只能调用 Object 类的方法(几乎不使用)   
+⑨. exception: 在声明了 page 指令的 isErrorPage="true" 时, 才可以使用. *  
+<%@ page isErrorPage="true" %>  
+pageContext, request, session, application(对属性的作用域的范围从小到大)  
+out, response, config, page   
+exception  
+(6. JSP模版元素: JSP页面中的静态HTML内容称   
+(7. JSP表达式（expression）提供了将一个 java 变量或表达式的计算结果输出到客户端的简化方式，
+它将要输出的变量或表达式直接封装在<%= 和 %>之中。  
+<%= date %>  
+(8. JSP脚本片断（scriptlet）是指嵌套在<% 和 %>之中的一条或多条Java程序代码。   
+多个脚本片断中的代码可以相互访问  
+`
+<% 
+	String ageStr = request.getParameter("age");
+	Integer age = Integer.parseInt(ageStr);
+	if(age >= 18){
+%>
+		成人...
+<%
+	}else{
+%>
+		未成人...
+<%
+	}
+%>
+`
+(9. JSP 声明: JSP 声明将 Java 代码封装在<%！和 %>之中，
+它里面的代码将被插入进 Servle t的 _jspService 方法的外面
+(在 JSP 页面中几乎从不这样使用)  
+(10. JSP注释的格式：<%-- JSP 注释 --%> <!-- HTML 注释 -->
+区别: JSP 注释可以阻止 Java 代码的执行.   
+7). 和属性相关的方法:  
+(1. 方法  
+void setAttribute(String name, Object o): 设置属性    
+Object getAttribute(String name): 获取指定的属性  
+Enumeration getAttributeNames(): 获取所有的属性的名字组成的 Enumeration 对象  
+removeAttribute(String name): 移除指定的属性   
+(2. pageContext, request, session, application 对象都有这些方法,
+这四个对象也称之为域对象.   
+pageContext: 属性的作用范围仅限于当前 JSP 页面  
+request:  属性的作用范围仅限于同一个请求.   
+session: 属性的作用范围限于一次会话: 浏览器打开直到关闭称之为一次会话(在此期间会话不失效)  
+application: 属性的作用范围限于当前 WEB 应用. 是范围最大的属性作用范围, 
+只要在一处设置属性, 在其他各处的 JSP 或 Servlet 中都可以获取到.  
+8)指令:  
+(1. JSP 指令: JSP指令（directive）是为JSP引擎而设计的, 
+它们并不直接产生任何可见输出, 而只是告诉引擎如何处理JSP页面中的其余部分。  
+(2. 在目前的JSP 2.0中，定义了page、include 和 taglib这三种指令  
+(3. page 指令:  
+1). page指令用于定义JS。。。。。12P页面的各种属性, 无论page指令出现在JSP页面中的什么地方, 
+它作用的都是整个JSP页面, 为了保持程序的可读性和遵循良好的编程习惯, page指令最好是放在整个JSP页面的起始位置。   
+2). page 指令常用的属性:   
+①. import 属性: 指定当前 JSP 页面对应的 Servlet 需要导入的类.   
+<%@page import="java.text.DateFormat"%>  
+②. session 属性: 取值为 true 或 false, 指定当前页面的 session 隐藏变量是否可用, 
+也可以说访问当前页面时是否一定要生成 HttpSession对象.   
+<%@ page session="false" %>   
+③. errorPage 和 isErrorPage:   
+`
+  errorPage 指定若当前页面出现错误的实际响应页面时什么. 
+其中 / 表示的是当前 WEB 应用的根目录. <%@ page errorPage="/error.jsp" %> 
+在响应 error.jsp 时, JSP 引擎使用的请求转发的方式. 
+  isErrorPage 指定当前页面是否为错误处理页面, 可以说明当前页面是否可以使用 exception 隐藏变量. 
+需要注意的是: 若指定isErrorPage="true", 并使用 exception 的方法了, 一般不建议能够直接访问该页面. 
+  如何使客户不能直接访问某一个页面呢 ? 对于 Tomcat 服务器而言, WEB-INF 下的文件是不能通过在浏览器中直接输入地址的方式
+来访问的. 但通过请求的转发是可以的!
+  还可以在web.xml 文件中配置错误页面: 
+    <error-page>
+    <!-- 指定出错的代码: 404 没有指定的资源, 500 内部错误. -->
+    <error-code>404</error-code>
+    <!-- 指定响应页面的位置 -->
+    <location>/WEB-INF/error.jsp</location>
+    </error-page>
+    <error-page>
+    <!-- 指定异常的类型 -->
+    <exception-type>java.lang.ArithmeticException</exception-type>
+    <location>/WEB-INF/error.jsp</location>
+    </error-page>
+`
+④. contentType: 指定当前 JSP 页面的响应类型. 实际调用的是 
+response.setContentType("text/html; charset=UTF-8");
+通常情况下, 对于 JSP 页面而言其取值均为 text/html; charset=UTF-8. 
+charset 指定返回的页面的字符编码是什么. 通常取值为 UTF-8   
+⑤. pageEncoding: 指定当前 JSP 页面的字符编码. 通常情况下该值和 contentType 中的 charset 一致.   
+⑥. isELIgnored: 指定当前 JSP 页面是否可以使用 EL 表达式. 通常取值为 false.   
+(4. include 指令: <%@ include file="b.jsp" %>  
+1). include 指令用于通知 JSP 引擎在翻译当前 JSP 页面时将其他文件中的内容合并进当前 JSP 
+页面转换成的 Servlet 源文件中,这种在源文件级别进行引入的方式称之为静态引入, 
+当前JSP页面与静态引入的页面紧密结合为一个Servlet。  
+2). file属性的设置值必须使用相对路径   
+3). 如果以 / 开头，表示相对于当前WEB应用程序的根目录（注意不是站点根目录），否则，表示相对于当前文件。  
+(5. jsp:incluce 标签:  
+1). <jsp:include page="b.jsp"></jsp:include>  
+2). 动态引入: 并不是像 include 指令生成一个 Servlet 源文件, 而是生成两个 Servlet 源文件, 
+然后通过一个方法的方式把目标页面包含进来.   
+org.apache.jasper.runtime.JspRuntimeLibrary.include(request, response, "b.jsp", out, false);  
+(6. jsp:forward:   
+1).<jsp:forward page="/include/b.jsp"></jsp:forward>	    
+相当于. 
+<% 
+	request.getRequestDispatcher("/include/b.jsp").forward(request, response);
+%>  
+2). 但使用 jsp:forward 可以使用 jsp:param 子标签向 b.jsp 传入一些参数.
+ 同样 jsp:include 也可以使用 jsp:param 子标签.   
+ `
+ <jsp:forward page="/include/b.jsp">
+ 	<jsp:param value="abcd" name="username"/>
+ </jsp:forward>	
+ OR
+ <jsp:include page="/include/b.jsp">
+ 	<jsp:param value="abcd" name="username"/>
+ </jsp:include>
+ `  
+在  b.jsp 页面可以通过 request.getParameter("username") 获取到传入的请求参数.   
+(7. 关于中文乱码:  
+1). 在 JSP 页面上输入中文, 请求页面后不出现乱码: 保证  contentType="text/html; charset=UTF-8", 
+pageEncoding="UTF-8" charset 和 pageEncoding 的编码一致, 且都支持中文. 通常建议取值为UTF-8
+还需保证浏览器的显示的字符编码也和请求的 JSP 页面的编码一致.   
+2). 获取中文参数值: 默认参数在传输过程中使用的编码为 ISO-8859-1  
+①. 对于 POST 请求: 只要在获取请求信息之前(在调用 request.getParameter 或者是 request.getReader 等), 
+调用 request.setCharacterEncoding("UTF-8") 即可.  
+②. 对于 GET 请求: 前面的方式对于 GET 无效. 可以通过修改 Tomcat 的 server.xml 文件的方式.   
+参照 http://localhost:8989/docs/config/index.html 文档的 useBodyEncodingForURI 属性. 
+为 Connector 节点添加 useBodyEncodingForURI="true" 属性即可.   
+<Connector connectionTimeout="20000" port="8989" protocol="HTTP/1.1" 
+redirectPort="8443" useBodyEncodingForURI="true"/>     
+9.Cookie  
+1).为什么要有cookie：  
+作为WEB服务器，必须能够采用一种机制来唯一地标识一个用户，同时记录该用户的状态  
+WEB应用会话 是指一个客户端浏览器与WEB服务器之间连续发生的一系列请求和响应过程  
+WEB应用的会话状态 是指WEB服务器与浏览器在会话过程中产生的状态信息，借助会话状态，
+WEB服务器能够把属于同一会话中的一系列的请求和响应过程关联起来。  
+2)实现有状态的会话  
+需要浏览器对其发出的每个请求消息都进行标识：属于同一个会话中的请求消息都附带同样的标识号，
+该标识号为会话ID，即SessionID.  
+在servlet规范中，常用以下两种机制完成会话跟踪:cookie,session  
+3)cookie机制：  
+采用在客户端保持HTTP状态信息的方案；  
+Cookie是在浏览器访问WEB服务器的某个资源时，
+由WEB服务器在HTTP响应消息头中附带传送给浏览器的一个小文本文件；  
+一旦WEB浏览器保存了该Cookie,那么在以后访问服务器时，
+都会在HTTP请求头中将这个Cookie回传给服务器；  
+底层实现原理：服务器通过在HTTP响应消息中增加set-Cookie响应头字段将Cookie信息发送给浏览器，
+浏览器则通过在HTTP请求消息中增加Cookie请求头字段将Cookie回传给服务器；  
+一个Cookie只能标识一种信息，它至少含有一个标识信息的名称(NAME)和值(VALUE);  
+一个服务器可以给一个浏览器发送多个Cookie,一个浏览器可以存储多个服务器提供的Cookie;  
+浏览器一般只允许存放多个Cookie,每个站点最多存放20个Cookie,每个Cookie的大小限制为4KB.  
+在JAVAWEB中使用Cookie类代表Cookie  
+4)服务器对Cookie的调用:  
+HttpServletRequest获取Cookie;  
+HttpServletResponse设置Cookie.
+`
+Cookie[] cookies = request.getCookies();
+        if (cookies != null && cookies.length > 1){
+            for (Cookie item : cookies){
+                out.print(item.getName() + "----" + item.getValue());
+                out.print("<br>");
+            }
+        }else{
+            out.print("没有Cookie,创建一个");
+            Cookie cookie = new Cookie("name","atguigu");
+            response.addCookie(cookie);
+        }
+`
+5)Cookie的发送步骤:  
+创建Cookie对象  
+设置最大时效  
+将Cookie放入到HTTP响应报头：  
+如果创建了一个Cookie,并将它发送到浏览器，默认情况下它是一个会话级别的cookie; 
+存储在浏览器的内存中，用户退出浏览器之后被删除。若希望浏览器将该cookie存储在磁盘上，
+则需要使用maxAge,并给出一个以秒为单位的时间。
+将最大时效设为0则使命令浏览器删除该cookie，若为负数，则表示不存储。
+6)会话cookie和持久化cookie的区别:  
+如果不设置过期时间，则表示这个cookie生命周期为浏览器会话期间，
+只要关闭浏览器窗口，cookie就全都消失。这种生命期为浏览器会话期的cookie被称为会话cookie。
+会话cookie一般不保存在硬盘上而是保存在内存里；  
+如果设置过期时间浏览器会把cookie保存在硬盘上,直到超过设定的时间;  
+存储在硬盘上的cookie可以在不同的浏览器进程间共享；
+对于保存在内存的cookie,不同的浏览器有不同的处理方式  
+
+10.Session  
+
+11.标签  
+
+12.Filter  
+
+13.Listener  
+
+14.文件上传下载  
+
+15.国际化  
+
+
+
 
 
 
