@@ -1813,10 +1813,101 @@ Cookie[] cookies = request.getCookies();
 如果设置过期时间浏览器会把cookie保存在硬盘上,直到超过设定的时间;  
 存储在硬盘上的cookie可以在不同的浏览器进程间共享；
 对于保存在内存的cookie,不同的浏览器有不同的处理方式  
+6)Cookie的Path问题  
+cookie的作用范围：可以作用当前目录和当前目录的子目录，
+但不能作用于当前目录的上一级目录：  
+也就是说，在一个页面上定义的Cookie,在更高级的目录页面上，不能使用  
+设定Cookie的作用范围:cookie.setPath(request.getContextPath());  
+10.Session   
+1)session机制:  
+采用在服务器保持HTTP状态信息的方案。  
+使用散列表结构来保存信息，当要创建一个session时，服务器先检查这个客户端请求中是否包含sessionID,
+,若无，则创建session和相关联的sessionID，返回给客户端使用。   
+session是以cookie或URL重写为基础的，默认使用cookie来实现，系统会创造一个名为JSESSIONID的输出cookie,
+这称之为session cookie,以区别persistent cookie(即cookie)，session cookie存储于浏览器中，因此一般是看不到的。
+但浏览器禁止cookie时，服务器会采用URL重写的方式传递SessionID,这时地址栏看到。  
 
-10.Session  
-
+2)HttpSession 的生命周期：
+#####什么时候创建 HttpSession 对象  
+①. 对于 JSP: 是否浏览器访问服务端的任何一个 JSP, 服务器都会立即创建一个 HttpSession 对象呢？  
+不一定。若当前的 JSP 是客户端访问的当前 WEB 应用的第一个资源，
+且 JSP 的 page 指定的 session 属性值为 false, 
+则服务器就不会为 JSP 创建一个 HttpSession 对象;  
+若当前 JSP 不是客户端访问的当前 WEB 应用的第一个资源，
+且其他页面已经创建一个 HttpSession 对象，
+则服务器也不会为当前 JSP 页面创建一个 HttpSession 对象，
+而回会把和当前会话关联的那个 HttpSession 对象返回给当前的 JSP 页面. 
+②. 对于 Serlvet: 若 Serlvet 是客户端访问的第一个 WEB 应用的资源,
+则只有调用了 request.getSession() 或 request.getSession(true) 才会创建 HttpSession 对象  
+#####page 指令的 session=“false“  到底表示什么意思？  
+当前 JSP 页面禁用 session 隐含变量！但可以使用其他的显式的 HttpSession 对象  
+#####在 Serlvet 中如何获取 HttpSession 对象？  
+request.getSession(boolean create): 
+create 为 false, 若没有和当前 JSP 页面关联的 HttpSession 对象, 则返回 null; 若有, 则返回 true	  
+create 为 true, 一定返回一个 HttpSession 对象. 若没有和当前 JSP 页面关联的 HttpSession 对象, 
+则服务器创建一个新的  
+HttpSession 对象返回, 若有, 直接返回关联的. 
+request.getSession(): 等同于 request.getSession(true)  
+#####什么时候销毁 HttpSession 对象:  
+①. 直接调用 HttpSession 的 invalidate() 方法: 该方法使 HttpSession 失效  
+②. 服务器卸载了当前 WEB 应用.     
+③. 超出 HttpSession 的过期时间.   
+设置 HttpSession 的过期时间: session.setMaxInactiveInterval(5); 单位为秒   
+在 web.xml 文件中设置 HttpSession 的过期时间: 单位为 分钟.  
+	`
+	<session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+	`
+④. 并不是关闭了浏览器就销毁了 HttpSession.   
+3)路径问题  
+①绝对路径： 相对于当前 WEB 应用的路径. 在当前 WEB 应用的所有的路径前都添加 contextPath 即可.   
+绝对路径:http://localhost:8080/contextPath/a.jsp  
+contextPath 由 request 或 application 来获取  
+② / 什么时候代表站点的根目录, 什么时候代表当前 WEB 应用的根目录  
+①.当前 WEB 应用的根路径: http://localhost:8080/contextPath/:若 / 需交由 servlet 容器来处理  
+请求转发时  
+web.xml 文件中映射 servlet   
+ 定制各种标签中的 /  
+②.WEB 站点的根路径: http://localhost:8080/ :若 / 交由 浏览器来处理  
+超链接   
+表单中的 action  
+重定向时  
+若 / 需要服务器进行内部解析, 则代表的就是 WEB 应用的根目录.
+ 若是交给浏览器了, 则 / 代表的就是站点的根目录  
+若 / 代表的是 WEB 应用的根目录, 就不需要加上 contextPath 了.   
+4)表单的重复提交  
+重复提交的情况:   
+①. 在表单提交到一个 Servlet, 而 Servlet 又通过请求转发的方式响应一个 JSP(HTML) 页面, 
+此时地址栏还保留着 Serlvet 的那个路径, 在响应页面点击 "刷新"   
+②. 在响应页面没有到达时重复点击 "提交按钮".   
+③. 点击 "返回", 再点击 "提交"  
+不是重复提交的情况: 点击 "返回", "刷新" 原表单页面, 再 "提交"。  
+如何避免表单的重复提交: 在表单中做一个标记, 提交到 Servlet 时, 
+检查标记是否存在且是否和预定义的标记一致, 若一致, 则受理请求,
+并销毁标记, 若不一致或没有标记, 则直接响应提示信息: "重复提交"   
+①. 仅提供一个隐藏域: <input type="hidden" name="token" value="atguigu"/>.
+ 行不通: 没有方法清除固定的请求参数.   
+②. 把标记放在 request 中. 行不通, 因为表单页面刷新后, request 已经被销毁, 
+再提交表单是一个新的 request.  
+③. 把标记放在 session 中. 可以！  
+在原表单页面, 生成一个随机值 token  
+在原表单页面, 把 token 值放入 session 属性中  
+在原表单页面, 把 token 值放入到 隐藏域 中.  
+在目标的 Servlet 中: 获取 session 和 隐藏域 中的 token 值  
+比较两个值是否一致: 若一致, 受理请求, 且把 session 域中的 token 属性清除  
+若不一致, 则直接响应提示页面: "重复提交"  
+5)使用 HttpSession 实现验证码  
+基本原理: 和表单重复提交一致:  
+在原表单页面, 生成一个验证码的图片, 生成图片的同时, 需要把该图片中的字符串放入到 session 中.   
+在原表单页面, 定义一个文本域, 用于输入验证码.   
+在目标的 Servlet 中: 获取 session 和表单域中的验证码的值  
+比较两个值是否一致: 若一致, 受理请求, 且把 session 域中的验证码 属性清除  
+若不一致, 则直接通过重定向的方式返回原表单页面, 并提示用户"验证码错误"   
 11.标签  
+
+
+
 
 12.Filter  
 
