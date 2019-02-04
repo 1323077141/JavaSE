@@ -1905,13 +1905,399 @@ web.xml 文件中映射 servlet
 比较两个值是否一致: 若一致, 受理请求, 且把 session 域中的验证码 属性清除  
 若不一致, 则直接通过重定向的方式返回原表单页面, 并提示用户"验证码错误"   
 11.标签  
-
-
-
-
+1. 相对路径和绝对路径:  
+1). 为什么要解决相对路径的问题: 在有一个 Servlet 转发页面的情况下, 会导致相对路径的混乱.   
+a.jsp: <a href="ToBServlet">To B Page2</a>  
+ToBServlet: request.getRequestDispatcher("/dir/b.jsp").forward(request, response);  
+注意, 此时点击 To B Page2 超链接后的浏览器的地址栏的值: 
+http://localhost:8989/day_36/ToBServlet, 实际显示的是dir 路径下的 b.jsp  
+而 b.jsp 页面有一个超链接: <a href="c.jsp">TO C Page</a>. 
+默认情况下, c.jsp 应该和 b.jsp 在同一路径下. 
+此时点击超链接将在浏览器地址栏显示: http://localhost:8989/day_36/c.jsp.
+但在根目录下并没有 c.jsp, 所以会出现路径混乱的问题.   
+2). 使用绝对路径会解决以上的问题:  
+绝对路径: 相对于当前 WEB 站点根目录的路径.   
+http://localhost:8989/day_36/c.jsp: http://localhost:8989/ 
+是 WEB 站点的根目录, /day_36 是 contextPath,
+/c.jsp 是相对于当前 WEB 应用的一个文件路径. 
+我们需要在当前 WEB 应用的任何的路径下都添加上 contextPath, 即可.   
+比如:   
+<a href="ToBServlet">To B Page2</a> 
+需改为: <a href="<%= request.getContextPath() %>/ToBServlet">To B Page2</a>  
+response.sendRedirect("a.jsp"); 
+需改为: response.sendRedirect(request.getContextPath() + "/a.jsp");  
+<form action="AddServlet"></form> 
+需改为: <form action="<%= request.getContextPath() %>/AddServlet"></form>  
+3). 在 JavaWEB 应用中 / 代表的是: 有时代表当前 WEB 应用的根目录, 有时代表的是站点的根目录.  
+/ 代表的是当前 WEB 应用的根路径: 若 / 所在的命令或方法需被 WEB 服务器解析, 
+而不是直接打给浏览器, 则 / 代表 WEB 应用的根路径. 此时编写
+绝对路径就不需要在添加 contextPath 了. 
+在 web.xml 文件中做 Serlvet 映射路径时,  
+在请求转发: request.getRequestDispatcher("/dir/b.jsp").forward(request, response);  
+/ 代表的是站点的根目录: 若 / 直接交由浏览器解析, / 代表的就是站点的根路径, 此时必须加上 contextPath
+<form action="/AddServlet"></form> 
+response.sendRedirect("/a.jsp");  
+4). 如何获取 contextPath:   
+ServletContext： getContextPath()  
+HttpServletRequest: getContextPath()  
+2. 自定义标签
+1). HelloWorld  
+①. 创建一个标签处理器类: 实现 SimpleTag 接口.   
+②. 在 WEB-INF 文件夹下新建一个 .tld(标签库描述文件) 为扩展名的 xml 文件. 并拷入固定的部分: 并对   
+description, display-name, tlib-version, short-name, uri 做出修改  
+<taglib...>
+<description>JSTL 1.1 core library</description>
+<display-name>JSTL core</display-name>
+<tlib-version>1.1</tlib-version>
+<short-name>c</short-name>
+<uri>http://java.sun.com/jsp/jstl/core</uri>
+</taglib>
+③. 在 tld 文件中描述自定义的标签:    
+<!-- 描述自定义的 HelloSimpleTag 标签 -->
+ <tag>
+ <!-- 标签的名字: 在 JSP 页面上使用标签时的名字 -->
+ <name>hello</name>
+ <!-- 标签所在的全类名 -->
+ <tag-class>com.atguigu.javaweb.tag.HelloSimpleTag</tag-class>
+ <!-- 标签体的类型 -->
+<body-content>empty</body-content>
+</tag>
+④. 在 JSP 页面上使用自定义标签:   
+> 使用 taglib 指令导入标签库描述文件:
+ <%@taglib uri="http://www.atguigu.com/mytag/core" prefix="atguigu" %>
+> 使用自定义的标签: <atguigu:hello/>   
+2). setJspContext: 一定会被 JSP 引擎所调用, 先于 doTag, 
+把代表 JSP 引擎的 pageContext 传给标签处理器类.  
+`
+private PageContext pageContext;
+@Override
+public void setJspContext(JspContext arg0) {
+	System.out.println(arg0 instanceof PageContext);  
+	this.pageContext = (PageContext) arg0;
+}	
+`
+3). 带属性的自定义标签:  
+①. 先在标签处理器类中定义 setter 方法. 建议把所有的属性类型都设置为 String 类型. 
+`  
+private String value;
+private String count;
+public void setValue(String value) {
+	this.value = value;
+}
+public void setCount(String count) {
+	this.count = count;
+}
+`
+②. 在 tld 描述文件中来描述属性:  
+<!-- 描述当前标签的属性 -->
+<attribute>
+	<!-- 属性名, 需和标签处理器类的 setter 方法定义的属性相同 -->
+	<name>value</name>
+	<!-- 该属性是否被必须 -->
+	<required>true</required>
+	<!-- rtexprvalue: runtime expression value 
+		当前属性是否可以接受运行时表达式的动态值 -->
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+③. 在页面中使用属性, 属性名同 tld 文件中定义的名字.   
+<atguigu:hello value="${param.name }" count="10"/>  
+4). 通常情况下开发简单标签直接继承 SimpleTagSupport 就可以了. 
+可以直接调用其对应的 getter 方法得到对应的 API   
+public class SimpleTagSupport implements SimpleTag{
+    public void doTag() 
+        throws JspException, IOException{}
+    private JspTag parentTag;
+    public void setParent( JspTag parent ) {
+        this.parentTag = parent;
+    }
+    public JspTag getParent() {
+        return this.parentTag;
+    }
+    private JspContext jspContext;
+    public void setJspContext( JspContext pc ) {
+        this.jspContext = pc;
+    }
+    protected JspContext getJspContext() {
+        return this.jspContext;
+    }
+    private JspFragment jspBody;
+    public void setJspBody( JspFragment jspBody ) {
+        this.jspBody = jspBody;
+    }
+    protected JspFragment getJspBody() {
+        return this.jspBody;
+    }   
+}
+3. JSTL:
+1)*. c:out 主要用于对特殊字符进行转换. 真正进行输出时, 建议使用 c:out, 而不是使用 EL  
+2)*. c:set: 可以为域赋属性值。 而对域对象中的 JavaBean 的属性赋值用的并不多.    
+3). c:remove: 移除指定域对象的指定属性值(较少使用, 即便移除也是在 Servlet 中完成)   
+4)*. c:if: 在页面上对现实的内容进行过滤, 把结果存储到域对象的属性中. 但不灵活, 会被其他的自定义标签所取代.   
+5). c:choose, c:when, c:otherwise: 作用同上, 但麻烦, 不灵活.  
+6)*. c:forEach: 对集合进行遍历的. 常用!    
+7). c:forTokens: 处理字符串, 类似于 String 累的 split() 方法(知道即可)    
+8). c:import: 导入页面到当前页面的. (了解)    
+9). c:redirect: 当前页面进行重定向的. (使用较少)    
+10)*. c:url: 产生一个 URL 的, 可以进行 URL 重写, 变量值编码, 较为常用.    
+2. 开发有父标签的标签:  
+1). 父标签无法获取子标签的引用, 父标签仅把子标签作为标签体来使用.   
+2). 子标签可以通过 getParent() 方法来获取父标签的引用(需继承 
+SimpleTagSupport 或自实现 SimpleTag 接口的该方法):  
+若子标签的确有父标签, JSP 引擎会把代表父标签的引用通过  setParent(JspTag parent)  赋给标签处理器  
+3). 注意: 父标签的类型是 JspTag 类型. 该接口是一个空接口, 但是来统一 SimpleTag 和 Tag 的.
+ 实际使用需要进行类型的强制转换.  
+4). 在 tld 配置文件中, 无需为父标签有额外的配置. 但, 子标签是是以标签体的形式存在的, 
+所以父标签的 <body-content></body-content>需设置为 scriptless  
+5). 实现 
+<c:choose>
+	<c:when test="${param.age > 24}">大学毕业</c:when>
+	<c:when test="${param.age > 20}">高中毕业</c:when>
+	<c:otherwise>高中以下...</c:otherwise>
+</c:choose>
+> 开发 3 个标签: choose, when, otherwise   
+> 其中 when 标签有一个 boolean 类型的属性: test  
+> choose 是 when 和 otherwise 的父标签  
+> when 在 otherwise 之前使用  
+> 在父标签 choose 中定义一个 "全局" 的 boolean 类型的 flag: 用于判断子标签在满足条件的情况下是否执行.   
+* 若 when 的 test 为 true, 且 when 的父标签的 flag 也为 true, 则执行 when 的标签体(正常输出标签体的内容), 
+同时把 flag 设置为 false  
+* 若 when 的 test 为 true, 且 when 的父标签的 flag 为 false, 则不执行标签体.   
+* 若 flag 为 true, otherwise 执行标签体.   
+1. 带标签体的自定义标签: 
+1). 若一个标签有标签体: 
+<atguigu:testJspFragment>abcdefg</atguigu:testJspFragment>
+在自定义标签的标签处理器中使用 JspFragment 对象封装标签体信息.   
+2). 若配置了标签含有标签体, 则 JSP 引擎会调用 setJspBody() 方法把 JspFragment 传递给标签处理器类
+在 SimpleTagSupport 中还定义了一个 getJspBody() 方法, 用于返回 JspFragment 对象.   
+3). JspFragment 的 invoke(Writer) 方法: 把标签体内容从 Writer 中输出, 若为 null, 
+则等同于 invoke(getJspContext().getOut()), 即直接把标签体内容输出到页面上.
+有时, 可以 借助于 StringWriter, 可以在标签处理器类中先得到标签体的内容:   
+//1. 利用 StringWriter 得到标签体的内容.
+StringWriter sw = new StringWriter();
+bodyContent.invoke(sw);
+//2. 把标签体的内容都变为大写
+String content = sw.toString().toUpperCase();
+4). 在 tld 文件中, 使用 body-content 节点来描述标签体的类型:   
+<body-content>: 指定标签体的类型, 大部分情况下, 取值为 scriptless。可能取值有 3 种：
+empty: 没有标签体	
+scriptless: 标签体可以包含 el 表达式和 JSP 动作元素，但不能包含 JSP 的脚本元素
+tagdependent: 表示标签体交由标签本身去解析处理。
+若指定 tagdependent，在标签体中的所有代码都会原封不动的交给标签处理器，而不是将执行结果传递给标签处理器
+<body-content>tagdependent</body-content>  
+5). 定义一个自定义标签: <atguigu:printUpper time="10">abcdefg</atguigu> 
+把标签体内容转换为大写, 并输出 time 次到浏览器上.   
+6). 实现 forEach 标签:   
+> 两个属性: items(集合类型, Collection), var(String 类型)
+> doTag: 
+* 遍历 items 对应的集合
+* 把正在遍历的对象放入到 pageContext 中, 键: var, 值: 正在遍历的对象. 
+* 把标签体的内容直接输出到页面上. 
+<c:forEach items="${requestScope.customers }" var="cust2">
+${pageScope.cust2.id } -- ${cust2.name } <br>
+</c:forEach>
+<atguigu:saveAsFile src="d:\\haha.txt">
+	abcde
+</atguigu>		  
 12.Filter  
-
+1. Filter:  
+Filter的基本功能是对Servlet容器调用servlet的过程进行拦截，从而在servlet进行响应处理的前后实现一些特殊的功能。  
+在ServletAPI中定义了三个接口类来编写Filter:Filter,FilterChain,FilterConfig  
+1). Filter 是什么 ?  
+①. JavaWEB 的一个重要组件, 可以对发送到 Servlet 的请求进行拦截, 并对响应也进行拦截.
+可以拦截JSP,Servet,静态图片文件和静态html文件   
+②. Filter 是实现了 Filter 接口的 Java 类.与Servlet程序相似，它由Servlet容器进行调用和执行  
+③. Filter 需要在 web.xml 文件中进行配置和映射.   
+2). 如何创建一个 Filter, 并把他跑起来  
+①. 创建一个 Filter 类: 实现 Filter 接口: public class HelloFilter implements Filter  
+②. 在 web.xml 文件中配置并映射该 Filter. 其中 url-pattern 
+指定该 Filter 可以拦截哪些资源, 即可以通过哪些 url 访问到该 Filter  
+<!-- 注册 Filter -->
+<filter>
+	<filter-name>helloFilter</filter-name>
+	<filter-class>com.atguigu.javaweb.HelloFilter</filter-class>
+</filter>
+<!-- 映射 Filter -->
+<filter-mapping>
+	<filter-name>helloFilter</filter-name>
+	<url-pattern>/test.jsp</url-pattern>
+</filter-mapping>
+3). Filter 相关的 API:  
+①. Filter 接口:  
+> public void init(FilterConfig filterConfig): 类似于 Servlet 的 init 方法. 
+在创建 Filter 对象(Filter 对象在 Servlet 容器加载当前 WEB 应用时即被创建)后, 
+立即被调用, 且只被调用一次. 该方法用于对当前的 Filter 进行初始化操作. Filter 实例是单例的.   
+*  FilterConfig 类似于 ServletConfig:  
+getFilterName;getInitParametergetIniteParameters;getServletContext
+* 可以在 web.xml 文件中配置当前 Filter 的初始化参数. 配置方式也和 Servlet 类似。
+		<filter>
+			<filter-name>helloFilter</filter-name>
+			<filter-class>com.atguigu.javaweb.HelloFilter</filter-class>
+			<init-param> 
+				<param-name>name</param-name>
+				<param-value>root</param-value>
+			</init-param>
+		</filter>
+> public void doFilter(ServletRequest request, ServletResponse response,
+FilterChain chain): 真正 Filter 的逻辑代码需要编写在该方法中. 每次拦截都会调用该方法. 
+* FilterChain: Filter 链. 多个 Filter 可以构成一个 Filter 链. 	
+- doFilter(ServletRequest request, ServletResponse response): 
+把请求传给 Filter 链的下一个 Filter,
+若当前 Filter 是 Filter 链的最后一个 Filter, 将把请求给到目标 Serlvet(或 JSP)	
+- 多个 Filter 拦截的顺序和 <filter-mapping> 配置的顺序有关(不是注册的顺序), 靠前的先被调用.  
+> public void destroy(): 释放当前 Filter 所占用的资源的方法. 
+在 Filter 被销毁之前被调用, 且只被调用一次.  
+Filter执行顺序：  
+first-second-页面-second-first
+4). <dispatcher> 元素: 指定过滤器所拦截的资源被 Servlet 容器调用的方式，
+可以是REQUEST,INCLUDE,FORWARD和ERROR之一，默认REQUEST. 
+可以设置多个<dispatcher> 子元素用来指定 Filter 对资源的多种调用方式进行拦截  
+①. REQUEST：当用户直接访问页面时，Web容器将会调用过滤器。
+如果目标资源是通过RequestDispatcher的include()或forward()方法访问时，那么该过滤器就不会被调用。  
+通过 GET 或 POST 请求直接访问。   
+②. FORWARD：如果目标资源是通过RequestDispatcher的forward()方法访问时，
+那么该过滤器将被调用，除此之外，该过滤器不会被调用。  
+或 <jsp:forward page="/..." /> 或 通过 page 指令的 errorPage 转发页面. 
+<%@ page errorPage="test.jsp" %>
+②. INCLUDE：如果目标资源是通过RequestDispatcher的include()方法访问时，
+那么该过滤器将被调用。除此之外，该过滤器不会被调用。
+或 <jsp:include file="/..." />
+④. ERROR：如果目标资源是通过声明式异常处理机制调用时，那么该过滤器将被调用。
+除此之外，过滤器不会被调用。
+在 web.xml 文件中通过 error-page 节点进行声明:  
+<error-page>
+	<exception-type>java.lang.ArithmeticException</exception-type>
+	<location>/test.jsp</location>
+</error-page>
+<filter-mapping>
+	<filter-name>secondFilter</filter-name>
+	<url-pattern>/test.jsp</url-pattern>
+	<dispatcher>REQUEST</dispatcher>
+	<dispatcher>FORWARD</dispatcher>
+	<dispatcher>INCLUDE</dispatcher>
+	<dispatcher>ERROR</dispatcher>
+</filter-mapping>
+2. HttpServletWrapper 和 HttpServletResponseWrapper
+1). Servlet API 中提供了一个 HttpServletRequestWrapper 类来包装原始的 request 对象,
+HttpServletRequestWrapper 类实现了 HttpServletRequest 接口中的所有方法, 
+这些方法的内部实现都是仅仅调用了一下所包装的的 request 对象的对应方法  
+//包装类实现 ServletRequest 接口. 
+public class ServletRequestWrapper implements ServletRequest {
+    //被包装的那个 ServletRequest 对象
+    private ServletRequest request;
+	//构造器传入 ServletRequest 实现类对象
+    public ServletRequestWrapper(ServletRequest request) {
+		if (request == null) {
+		    throw new IllegalArgumentException("Request cannot be null");   
+		}
+		this.request = request;
+    }
+	//具体实现 ServletRequest 的方法: 调用被包装的那个成员变量的方法实现。 
+    public Object getAttribute(String name) {
+		return this.request.getAttribute(name);
+	}
+    public Enumeration getAttributeNames() {
+		return this.request.getAttributeNames();
+	}    
+}	
+相类似 Servlet API 也提供了一个 HttpServletResponseWrapper 类来包装原始的 response 对象
+2). 作用: 用于对 HttpServletRequest 或 HttpServletResponse 的某一个方法进行修改或增强.  
+public class MyHttpServletRequest extends HttpServletRequestWrapper{
+	public MyHttpServletRequest(HttpServletRequest request) {
+		super(request);
+	}
+	@Override
+	public String getParameter(String name) {
+		String val = super.getParameter(name);
+		if(val != null && val.contains(" fuck ")){
+			val = val.replace("fuck", "****");
+		}
+		return val;
+	}
+}
+3). 使用: 在 Filter 中, 利用 MyHttpServletRequest 替换传入的 HttpServletRequest  
+HttpServletRequest req = new MyHttpServletRequest(request);
+filterChain.doFilter(req, response);
+此时到达目标 Servlet 或 JSP 的 HttpServletRequest 实际上是 MyHttpServletRequest
+1. 使用 Filter 完成一个简单的权限模型:  
+1). 需求:   
+①. 管理权限  
+查看某人的权限;修改某人的权限
+②. 对访问进行权限控制: 有权限则可以访问, 否则提示: 没有对应的权限, 请返回  
+2). 实现:  
+②. 对访问进行权限控制:  
+使用 Filter 进行权限的过滤:  
+检验用户是否有权限, 若有, 则直接响应目标页面; 若没有重定向到 403.jsp
+*  403.jsp
+<h4>
+没有对应的权限, 
+请 <a href="">返回</a>
+</h4>
+	* 使用 Filter 如何进行过滤: 
+		- 获取 servletPath, 类似于 /app_3/article1.jsp
+		- 在用户已经登录(可使用 用户是否登录 的过滤器)的情况下, 获取用户信息. session.getAttribute("user")
+		- 再获取用户所具有的权限的信息: List<Authority>
+		- 检验用户是否有请求  servletPath 的权限: 可以思考除了遍历以外, 有没有更好的实现方式
+		- 若有权限则: 响应
+		- 若没有权限: 重定向到 403.jsp 
+	* others: 
+		- 用户若登录, 需要把用户信息(User 对象)放入到 HttpSession 中.
+		- 在检验权限之前, 需要判断用户是否已经登录.  	
+①. 管理权限:
+封装权限信息: Authority
+	Authority{
+		//显示到页面上的权限的名字
+		private String displayName;
+		//权限对应的 URL 地址: 已权限对应着一个 URL, 例如 Article_1 -> /app_4/article1.jsp
+		private String url;
+	}
+封装用户信息: User
+	User{
+		private String username;
+		private List<Autority> authorities;
+	}
+创建一个 UserDao:
+	User get(String username);
+	void update(String username, List<Autority>);
+页面
+	authority-manager.jsp: 
+		* 有一个 text 文本框, 供输入 username, 提交后, 使用 checkbox 显示当前用户所有的权限的信息.
+		<form action="/day_40/AuthorityServlet?method=get" method="post">
+			Name: <input name="name" type="text"/>
+			<input type="submit" value="Submit"/>
+		</form>
+		* 检查 request 中是否有 user 信息, 若有, 则显示 
+		xxx 的权限为: 对应的权限的 checkbox 打上对号. 提示, 页面上需要通过两层循环的方式来筛选出被选择的权限. 
+		<form action="/day_40/AuthorityServlet?method=get" method="post">
+			Name: <input name="name" type="text"/>
+			<input type="submit" value="Submit"/>
+		</form>
+		<br><br>
+		AAA 的权限是:
+		<br><br>
+		<form action="/day_40/AuthorityServlet?method=update" method="post">
+			<!-- 使用隐藏域来保存用户的 name -->
+			<input name="name" type="hidden" value="AAA"/>
+			<input type="checkbox" name="authority" value="/app_4/article1.jsp" 
+				checked="checked"/>Article_1
+			<br><br>
+			<input type="checkbox" name="authority" value="/app_4/article2.jsp" 
+				checked="checked"/>Article_2
+			<br><br>
+			<input type="checkbox" name="authority" value="/app_4/article3.jsp" 
+				checked="checked"/>Article_3
+			<br><br>
+			<input type="checkbox" name="authority" value="/app_4/article4.jsp" />Article_4
+			<br><br>
+			<input type="submit" value="Submit"/>
+		</form> 
+Servlet
+	authority-manager.jsp 提交表单后 get 方法: 获取表单的请求参数: username, 再根据 username 获取 User 信息. 把 user 放入到
+	request 中, 转发到 authority-manager.jsp.
+	authority-manager.jsp 修改权限的表单提交后 update 方法: 获取请求参数: username, authory(多选); 把选项封装为 List; 调用
+	UserDao 的 update() 方法实现权限的修改; 重定向到 authority-manager.jsp
 13.Listener  
+
+
 
 14.文件上传下载  
 

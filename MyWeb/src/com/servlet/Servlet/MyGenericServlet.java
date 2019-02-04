@@ -1,4 +1,4 @@
-package com.servlet.myServlet;
+package com.servlet.Servlet;
 
 import javax.servlet.*;
 import java.io.IOException;
@@ -25,7 +25,6 @@ public abstract class MyGenericServlet implements Servlet,ServletConfig {
     @Override
     public abstract void service(ServletRequest servletRequest,
                         ServletResponse servletResponse) throws ServletException, IOException;
-    }
 
     @Override
     public String getServletInfo() {
