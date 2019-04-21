@@ -17,18 +17,18 @@ public class InitServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		CustomerDAOFactory.getInstance().setType("jdbc");
+//		CustomerDAOFactory.getInstance().setType("jdbc");
 		
-		InputStream in =
-				getServletContext().getResourceAsStream("/WEB-INF/classes/switch.properties");
-		Properties properties = new Properties();
-		try {
-			properties.load(in);
-			String type = properties.getProperty("type");
-			CustomerDAOFactory.getInstance().setType(type);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		InputStream in =
+//				getServletContext().getResourceAsStream("/WEB-INF/classes/switch.properties");
+//		Properties properties = new Properties();
+//		try {
+//			properties.load(in);
+//			String type = properties.getProperty("type");
+//			CustomerDAOFactory.getInstance().setType(type);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		
 		
 	}

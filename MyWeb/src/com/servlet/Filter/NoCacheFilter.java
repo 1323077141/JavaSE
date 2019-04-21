@@ -10,6 +10,7 @@ public class NoCacheFilter extends HttpFilter{
 
     @Override
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+        //禁用浏览器缓存
         response.setDateHeader("Expires",-1);
         response.setHeader("Cache-Control","no-cache");
         response.setHeader("Pragma","no-cache");

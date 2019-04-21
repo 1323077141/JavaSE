@@ -74,7 +74,7 @@
 
     <servlet-mapping>
         <servlet-name>InitServlet</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/init</url-pattern>
     </servlet-mapping>
 
     <!--注册映射Filter-->
@@ -100,7 +100,42 @@
     <filter-mapping>
         <filter-name>secondFilter</filter-name>
         <url-pattern>/Filter/test.jsp</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
 
+    <!--用户信息放入到session中的键的名字-->
+    <context-param>
+        <param-name>userSessionKey</param-name>
+        <param-value>USERSESSION</param-value>
+    </context-param>
+    <!--若未登录，则需重定向的目录-->
+    <context-param>
+        <param-name>redirectPage</param-name>
+        <param-value>/login/login.jsp</param-value>
+    </context-param>
+    <!--不需要拦截的的RL列表-->
+    <context-param>
+        <param-name>uncheckedUrls</param-name>
+        <param-value>/login/a.jsp,/login/list.jsp,/login/doLogin.jsp</param-value>
+    </context-param>
 
+    <filter>
+        <filter-name>loginFilter</filter-name>
+        <filter-class>com.login.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>loginFilter</filter-name>
+        <url-pattern>/login/*</url-pattern>
+    </filter-mapping>
+    
+    <servlet>
+        <servlet-name>AuthorityServlet</servlet-name>
+        <servlet-class>com.authority.AuthorityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthorityServlet</servlet-name>
+        <url-pattern>/authority/*</url-pattern>
+    </servlet-mapping>
+    
 </web-app>
