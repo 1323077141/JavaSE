@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-public class AuthorityServlet extends HttpServlet
+public class AuthorityServlet extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -24,7 +24,7 @@ public class AuthorityServlet extends HttpServlet
 
     private UserDao userDao = new UserDao();
 
-    protected void getAuthorities(HttpServletRequest req, HttpServletResponse resp)
+    public void getAuthorities(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String username = req.getParameter("username");
         User user = userDao.get(username);
