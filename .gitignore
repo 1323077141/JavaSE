@@ -11,3 +11,6 @@ target
 target/
 src/.DS_Store
 *.iml
+.classpath
+.project
+.settings/
