@@ -4,7 +4,6 @@ logs
 logs/
 .idea
 .idea/
-out/
 src/test
 src/test/
 .DS_Store
@@ -12,8 +11,3 @@ target
 target/
 src/.DS_Store
 *.iml
-<<<<<<< HEAD
-.metadata
-=======
-.metadata
->>>>>>> 4e3371c635813dbcf35878c184986fd6eb222338
