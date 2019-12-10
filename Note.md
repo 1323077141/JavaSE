@@ -2390,6 +2390,11 @@ HttpSessionEvent: getSession()
 
 
 
+数据结构:
+
+数据结构       get/set     add/remove
+ArrayList       O(1)        O(n)
+LinkedList      O(n)        O(n)
 
 
 
